@@ -3,7 +3,7 @@ const AppColor = Object.freeze({
   mainSub: '#E0E5F2',
   sub: '#F5F5F5',
   text: '#000000',
-  textSub: '#333333',
+  textSub: '#888888',
 });
 
 export default AppColor;

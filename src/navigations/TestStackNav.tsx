@@ -2,7 +2,7 @@ import GAD7TestResultScreen from '../screens/test/GAD7TestResultScreen';
 import GAD7TestScreen from '../screens/test/GAD7TestScreen';
 import PHQ9TestResultScreen from '../screens/test/PHQ9TestResultScreen';
 import PHQ9TestScreen from '../screens/test/PHQ9TestScreen';
-import TestScreen from '../screens/test/TestScreen';
+import TestListScreen from '../screens/test/TestListScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stacks = createNativeStackNavigator();
@@ -11,8 +11,8 @@ function TestStackNav() {
   return (
     <Stacks.Navigator screenOptions={{ headerShown: false }}>
       <Stacks.Screen
-        name="test"
-        component={TestScreen}
+        name="test_list"
+        component={TestListScreen}
         options={{ title: '테스트' }}
       />
       <Stacks.Screen

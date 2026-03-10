@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ChatBotScreen from '../screens/ChatBotScreen';
+import ChatBotScreen from '../screens/chatbot/ChatBotScreen';
 import TestStackNav from './TestStackNav';
 import AppColor from '../utils/AppColor';
 import ChatBotIcon from '../assets/icon/ChatBotIcon';
@@ -7,6 +7,9 @@ import TestIcon from '../assets/icon/TestIcon';
 import DiaryIcon from '../assets/icon/DiaryIcon';
 import HospitalIcon from '../assets/icon/HospitalIcon';
 import UserCircleIcon from '../assets/icon/UserCircleIcon';
+import DiaryStackNav from './DiaryStackNav';
+import HospitalStackNav from './HospitalStackNav';
+import MyPageStackNav from './MyPageStackNav';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -32,7 +35,7 @@ function MainBottomTab() {
       screenOptions={{ tabBarActiveTintColor: AppColor.main }}
     >
       <BottomTab.Screen
-        name="chatBotNav"
+        name="chat_bot_nav"
         component={ChatBotScreen}
         options={{
           title: '챗봇',
@@ -40,23 +43,23 @@ function MainBottomTab() {
         }}
       />
       <BottomTab.Screen
-        name="testNav"
+        name="test_nav"
         component={TestStackNav}
         options={{ title: '테스트', tabBarIcon: testTabBarIcon }}
       />
       <BottomTab.Screen
-        name="map"
-        component={ChatBotScreen}
+        name="diary_nav"
+        component={DiaryStackNav}
         options={{ title: '일기', tabBarIcon: diaryTabBarIcon }}
       />
       <BottomTab.Screen
-        name="diaryNav"
-        component={ChatBotScreen}
+        name="hospital_nav"
+        component={HospitalStackNav}
         options={{ title: '병원', tabBarIcon: hospitalTabBarIcon }}
       />
       <BottomTab.Screen
-        name="myPageNav"
-        component={ChatBotScreen}
+        name="my_page_nav"
+        component={MyPageStackNav}
         options={{ title: '마이페이지', tabBarIcon: myPageTabBarIcon }}
       />
     </BottomTab.Navigator>
