@@ -32,7 +32,10 @@ const myPageTabBarIcon = ({ focused }: { focused: boolean }) => (
 function MainBottomTab() {
   return (
     <BottomTab.Navigator
-      screenOptions={{ tabBarActiveTintColor: AppColor.main }}
+      screenOptions={{
+        tabBarActiveTintColor: AppColor.main,
+        headerTitleAlign: 'center',
+      }}
     >
       <BottomTab.Screen
         name="chat_bot_nav"

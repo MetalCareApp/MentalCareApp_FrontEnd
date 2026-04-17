@@ -16,14 +16,14 @@ function TestScreen() {
             link: 'phq9_test',
             title: 'PHQ-9 우울 테스트',
             explanation: '우울증을 진단하기 위한 테스트입니다.',
-            color: 'blue',
+            color: '#6FB7E9',
           },
           {
             id: 2,
             link: 'gad7_test',
             title: 'GAD-7 불안 테스트',
             explanation: '불안장애를 진단하기 위한 테스트입니다.',
-            color: 'red',
+            color: '#E45757',
           },
         ]}
         keyExtractor={({ id }) => id.toString()}

@@ -21,7 +21,7 @@ type GoogleLoginResult = {
   idToken: string | null;
 };
 
-const LoginScreen: React.FC = () => {
+function LoginScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const LoginScreen: React.FC = () => {
       </View>
     </View>
   );
-};
+}
 
 export default LoginScreen;
 

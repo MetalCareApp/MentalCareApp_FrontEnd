@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainBottomTab from './src/navigations/MainBottomTab';
 import Toast from 'react-native-toast-message';
 import AlertScreen from './src/screens/etc/AlertScreen';
-import LoginScreen from './src/screens/auth/Login';
-import SignUpScreen from './src/screens/auth/SignUp';
+import LoginScreen from './src/screens/auth/LoginScreen';
+import SignUpScreen from './src/screens/auth/SignUpScreen';
 
 const Stacks = createNativeStackNavigator();
 

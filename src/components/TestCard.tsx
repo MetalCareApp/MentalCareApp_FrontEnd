@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   explanation: {
     fontSize: 12,
     color: '#fff',
+    fontWeight: 'bold',
   },
   explanationContainer: {
     borderRadius: 8,
