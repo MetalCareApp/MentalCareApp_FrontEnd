@@ -5,7 +5,7 @@ import { useUserStore } from '../../stores/user'; // 경로 맞게 수정
 
 const DUMMY_DATA = {
   username: '홍길동',
-  isDoctor: false,
+  isDoctor: true, //TODO - 실제 로그인 시 서버에서 받아와야 함
 };
 
 const MyPageScreen: React.FC = () => {
@@ -32,14 +32,18 @@ const MyPageScreen: React.FC = () => {
     navigation.navigate('test_result_list');
   };
 
+  const handleMyHospital = () => {
+    navigation.navigate('my_hospital_manage');
+  };
+
   /* ---------------- 의사 메뉴 ---------------- */
 
   const handlePatients = () => {
     navigation.navigate('patient_list');
   };
 
-  const handleCreateReport = () => {
-    navigation.navigate('create_report');
+  const handleResisterPatient = () => {
+    navigation.navigate('register_patient');
   };
 
   /* ---------------- 의사 전환 ---------------- */
@@ -74,13 +78,14 @@ const MyPageScreen: React.FC = () => {
           <>
             <MenuItem title="나의 환자 목록" onPress={handlePatients} />
             <MenuItem
-              title="리포트 생성하기"
-              onPress={handleCreateReport}
+              title="환자 등록하기"
+              onPress={handleResisterPatient}
               isLast
             />
           </>
         ) : (
           <>
+            <MenuItem title="나의 병원 관리" onPress={handleMyHospital} />
             <MenuItem
               title="찜한 병원 목록"
               onPress={handleFavoriteHospitals}

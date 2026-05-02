@@ -47,7 +47,7 @@ const DUMMY_HOSPITALS: Hospital[] = [
   },
 ];
 
-function FavoriteHospitalsScreen() {
+const FavoriteHospitalsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -147,7 +147,7 @@ function FavoriteHospitalsScreen() {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   screen: {

@@ -10,6 +10,9 @@ import UserCircleIcon from '../assets/icon/UserCircleIcon';
 import DiaryStackNav from './DiaryStackNav';
 import HospitalStackNav from './HospitalStackNav';
 import MyPageStackNav from './MyPageStackNav';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import NotificationIcon from '../assets/icon/NotificationIcon';
+import { useNavigation } from '@react-navigation/native';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -30,11 +33,30 @@ const myPageTabBarIcon = ({ focused }: { focused: boolean }) => (
 );
 
 function MainBottomTab() {
+  const navigation = useNavigation<any>();
+
   return (
     <BottomTab.Navigator
       screenOptions={{
         tabBarActiveTintColor: AppColor.main,
         headerTitleAlign: 'center',
+        headerRight: () => (
+          <Pressable
+            style={({ pressed }) => [
+              styles.notificationButton,
+              pressed && styles.pressed,
+            ]}
+            onPress={() => navigation.navigate('notification_list')}
+          >
+            <NotificationIcon width={24} height={24} color="black" />
+            <View style={styles.notificationBadge}>
+              <Text style={styles.notificationBadgeText}>1</Text>
+            </View>
+          </Pressable>
+        ),
+        headerRightContainerStyle: {
+          paddingRight: 16,
+        },
       }}
     >
       <BottomTab.Screen
@@ -70,3 +92,29 @@ function MainBottomTab() {
 }
 
 export default MainBottomTab;
+
+const styles = StyleSheet.create({
+  notificationButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pressed: {
+    opacity: 0.6,
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: AppColor.text.error,
+    borderRadius: '100%',
+    width: 16,
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  notificationBadgeText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+});
