@@ -12,6 +12,21 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BE7FEC9455C31FE09CD493ED /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		E93C81E8BF8E4C1BAD769506 /* Onglib-VeryRyeoOne.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D754341DED241078C3511F5 /* Onglib-VeryRyeoOne.ttf */; };
+		CE0B5771B30A474ABECDFC85 /* HumanBeomseokNeo-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5E55DF7237CC4A4DA82BBB94 /* HumanBeomseokNeo-ExtraLight.otf */; };
+		187770689C3F4E9490159E53 /* HumanBeomseokNeo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE2A1DB91BCB4C2C9AF464A0 /* HumanBeomseokNeo-Regular.otf */; };
+		EC7AC78181EF4552AC90E3DF /* HumanBeomseokNeo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5F434FCF42B74C78A6E06B4C /* HumanBeomseokNeo-Bold.otf */; };
+		F73D8D76B2EC4C00BE6FA5B3 /* HumanBeomseokNeo-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = BDB242596F384B53A7C395A2 /* HumanBeomseokNeo-Medium.otf */; };
+		D00FD933C40D4EA2B0B7ED7F /* HumanBeomseokNeo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 45212912B6084984BE64FD1A /* HumanBeomseokNeo-Light.otf */; };
+		2A31195DB2694AA2BF364C69 /* HumanBeomseokNeo-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = CCA5CD7B736C4958BA5DEEF2 /* HumanBeomseokNeo-Thin.otf */; };
+		DABFD2BC7BEA4F949C993085 /* HumanBeomseokNeo-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D03574FC550F4AB4BB679C94 /* HumanBeomseokNeo-SemiBold.otf */; };
+		B90BCED074CB47D59C6F2D10 /* SUITE-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 199DEE33A10F4752AF5A4DF2 /* SUITE-Light.otf */; };
+		C2B2952500DF4A3FBFE1B9FF /* SUITE-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D0C56B8B5F14ABAA5208FD6 /* SUITE-Medium.otf */; };
+		B53CC1B047624A6CA0E80A8A /* SUITE-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D981FA9868EC429A84D544BC /* SUITE-Regular.otf */; };
+		EA295554F4F141FB875A3AAE /* SUITE-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6B0142A7787543F7AA481A93 /* SUITE-Heavy.otf */; };
+		3C888EECA4D4436F93746643 /* SUITE-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A609CC82C85A458FBB65100C /* SUITE-Bold.otf */; };
+		8A15AD4F81534A1DAFAF58D0 /* SUITE-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B9F54E56D6184FB594FB1E25 /* SUITE-ExtraBold.otf */; };
+		844F9A9A8F7E4CCAB6400DB0 /* SUITE-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6738045D0BB2463F9492FD62 /* SUITE-SemiBold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +40,21 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MentalCareProject/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MentalCareProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		4D754341DED241078C3511F5 /* Onglib-VeryRyeoOne.ttf */ = {isa = PBXFileReference; name = "Onglib-VeryRyeoOne.ttf"; path = "../src/assets/fonts/Onglib-VeryRyeoOne.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5E55DF7237CC4A4DA82BBB94 /* HumanBeomseokNeo-ExtraLight.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-ExtraLight.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-ExtraLight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CE2A1DB91BCB4C2C9AF464A0 /* HumanBeomseokNeo-Regular.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-Regular.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5F434FCF42B74C78A6E06B4C /* HumanBeomseokNeo-Bold.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-Bold.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BDB242596F384B53A7C395A2 /* HumanBeomseokNeo-Medium.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-Medium.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		45212912B6084984BE64FD1A /* HumanBeomseokNeo-Light.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-Light.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CCA5CD7B736C4958BA5DEEF2 /* HumanBeomseokNeo-Thin.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-Thin.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D03574FC550F4AB4BB679C94 /* HumanBeomseokNeo-SemiBold.otf */ = {isa = PBXFileReference; name = "HumanBeomseokNeo-SemiBold.otf"; path = "../src/assets/fonts/HumanBeomseokNeo-SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		199DEE33A10F4752AF5A4DF2 /* SUITE-Light.otf */ = {isa = PBXFileReference; name = "SUITE-Light.otf"; path = "../src/assets/fonts/SUITE-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2D0C56B8B5F14ABAA5208FD6 /* SUITE-Medium.otf */ = {isa = PBXFileReference; name = "SUITE-Medium.otf"; path = "../src/assets/fonts/SUITE-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D981FA9868EC429A84D544BC /* SUITE-Regular.otf */ = {isa = PBXFileReference; name = "SUITE-Regular.otf"; path = "../src/assets/fonts/SUITE-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6B0142A7787543F7AA481A93 /* SUITE-Heavy.otf */ = {isa = PBXFileReference; name = "SUITE-Heavy.otf"; path = "../src/assets/fonts/SUITE-Heavy.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A609CC82C85A458FBB65100C /* SUITE-Bold.otf */ = {isa = PBXFileReference; name = "SUITE-Bold.otf"; path = "../src/assets/fonts/SUITE-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B9F54E56D6184FB594FB1E25 /* SUITE-ExtraBold.otf */ = {isa = PBXFileReference; name = "SUITE-ExtraBold.otf"; path = "../src/assets/fonts/SUITE-ExtraBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6738045D0BB2463F9492FD62 /* SUITE-SemiBold.otf */ = {isa = PBXFileReference; name = "SUITE-SemiBold.otf"; path = "../src/assets/fonts/SUITE-SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +105,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				C022C084F66C49E591AC24B4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -97,6 +128,29 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		C022C084F66C49E591AC24B4 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				4D754341DED241078C3511F5 /* Onglib-VeryRyeoOne.ttf */,
+				5E55DF7237CC4A4DA82BBB94 /* HumanBeomseokNeo-ExtraLight.otf */,
+				CE2A1DB91BCB4C2C9AF464A0 /* HumanBeomseokNeo-Regular.otf */,
+				5F434FCF42B74C78A6E06B4C /* HumanBeomseokNeo-Bold.otf */,
+				BDB242596F384B53A7C395A2 /* HumanBeomseokNeo-Medium.otf */,
+				45212912B6084984BE64FD1A /* HumanBeomseokNeo-Light.otf */,
+				CCA5CD7B736C4958BA5DEEF2 /* HumanBeomseokNeo-Thin.otf */,
+				D03574FC550F4AB4BB679C94 /* HumanBeomseokNeo-SemiBold.otf */,
+				199DEE33A10F4752AF5A4DF2 /* SUITE-Light.otf */,
+				2D0C56B8B5F14ABAA5208FD6 /* SUITE-Medium.otf */,
+				D981FA9868EC429A84D544BC /* SUITE-Regular.otf */,
+				6B0142A7787543F7AA481A93 /* SUITE-Heavy.otf */,
+				A609CC82C85A458FBB65100C /* SUITE-Bold.otf */,
+				B9F54E56D6184FB594FB1E25 /* SUITE-ExtraBold.otf */,
+				6738045D0BB2463F9492FD62 /* SUITE-SemiBold.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -161,6 +215,21 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				BE7FEC9455C31FE09CD493ED /* PrivacyInfo.xcprivacy in Resources */,
+				E93C81E8BF8E4C1BAD769506 /* Onglib-VeryRyeoOne.ttf in Resources */,
+				CE0B5771B30A474ABECDFC85 /* HumanBeomseokNeo-ExtraLight.otf in Resources */,
+				187770689C3F4E9490159E53 /* HumanBeomseokNeo-Regular.otf in Resources */,
+				EC7AC78181EF4552AC90E3DF /* HumanBeomseokNeo-Bold.otf in Resources */,
+				F73D8D76B2EC4C00BE6FA5B3 /* HumanBeomseokNeo-Medium.otf in Resources */,
+				D00FD933C40D4EA2B0B7ED7F /* HumanBeomseokNeo-Light.otf in Resources */,
+				2A31195DB2694AA2BF364C69 /* HumanBeomseokNeo-Thin.otf in Resources */,
+				DABFD2BC7BEA4F949C993085 /* HumanBeomseokNeo-SemiBold.otf in Resources */,
+				B90BCED074CB47D59C6F2D10 /* SUITE-Light.otf in Resources */,
+				C2B2952500DF4A3FBFE1B9FF /* SUITE-Medium.otf in Resources */,
+				B53CC1B047624A6CA0E80A8A /* SUITE-Regular.otf in Resources */,
+				EA295554F4F141FB875A3AAE /* SUITE-Heavy.otf in Resources */,
+				3C888EECA4D4436F93746643 /* SUITE-Bold.otf in Resources */,
+				8A15AD4F81534A1DAFAF58D0 /* SUITE-ExtraBold.otf in Resources */,
+				844F9A9A8F7E4CCAB6400DB0 /* SUITE-SemiBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

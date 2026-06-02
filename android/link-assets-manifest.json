@@ -1,0 +1,65 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-Bold.otf",
+      "sha1": "9b87452cab5a10bc18f0f35cb7956791e1bdfa9e"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-ExtraLight.otf",
+      "sha1": "42a505c568df97aaad452acc3803a3f9e29e23e2"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-Light.otf",
+      "sha1": "56f610f2a995c9bac9365a8d56761d3893655bd6"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-Medium.otf",
+      "sha1": "d8ff16acdfdc3c335c0f2f25a8620d4001dbe2e8"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-Regular.otf",
+      "sha1": "63f2d7ae18f4c2693ac2fede09b2049c35d59d32"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-SemiBold.otf",
+      "sha1": "cb70ebafbc0279dae59f9df9e861a738de72e269"
+    },
+    {
+      "path": "src/assets/fonts/HumanBeomseokNeo-Thin.otf",
+      "sha1": "d353ceca8331f52db89edbd3aa7d47084306e1a9"
+    },
+    {
+      "path": "src/assets/fonts/Onglib-VeryRyeoOne.ttf",
+      "sha1": "9dc3dbb1b6aee4e9c8aaf82973ef15acbdec2ec7"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-Bold.otf",
+      "sha1": "3f527f09ae8b9f6ef0f82f21bdb20717dfbb9227"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-ExtraBold.otf",
+      "sha1": "d13481fa27456c48f3b3c65f439a51238e8440f6"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-Heavy.otf",
+      "sha1": "2cd4a5480e37721a8a1ae560dc9b1171569e696c"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-Light.otf",
+      "sha1": "1f86ed4c8b7c9356628e30fbd85c15f8f78f4dc7"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-Medium.otf",
+      "sha1": "bd6a3edfb6fa24108731b67a091b0ed9597dfb92"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-Regular.otf",
+      "sha1": "0e5aaabf999d3e155fc5feded603c2078c8d1237"
+    },
+    {
+      "path": "src/assets/fonts/SUITE-SemiBold.otf",
+      "sha1": "1194a7524ad1252e12c1ea98e3f0b28b8f49a35e"
+    }
+  ]
+}

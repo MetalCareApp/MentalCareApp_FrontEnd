@@ -44,15 +44,13 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSExceptionDomains</key>
-    	<dict>
-        	<key>52.79.239.59</key>
-        	<dict>
-            	<key>NSIncludesSubdomains</key>
+		<dict>
+			<key>52.79.239.59</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
 				<true/>
-
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
-
 				<key>NSTemporaryExceptionMinimumTLSVersion</key>
 				<string>TLSv1.0</string>
 			</dict>
@@ -61,7 +59,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -83,5 +81,23 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Onglib-VeryRyeoOne.ttf</string>
+		<string>HumanBeomseokNeo-ExtraLight.otf</string>
+		<string>HumanBeomseokNeo-Regular.otf</string>
+		<string>HumanBeomseokNeo-Bold.otf</string>
+		<string>HumanBeomseokNeo-Medium.otf</string>
+		<string>HumanBeomseokNeo-Light.otf</string>
+		<string>HumanBeomseokNeo-Thin.otf</string>
+		<string>HumanBeomseokNeo-SemiBold.otf</string>
+		<string>SUITE-Light.otf</string>
+		<string>SUITE-Medium.otf</string>
+		<string>SUITE-Regular.otf</string>
+		<string>SUITE-Heavy.otf</string>
+		<string>SUITE-Bold.otf</string>
+		<string>SUITE-ExtraBold.otf</string>
+		<string>SUITE-SemiBold.otf</string>
+	</array>
 </dict>
 </plist>
