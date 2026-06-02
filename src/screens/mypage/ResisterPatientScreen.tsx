@@ -9,40 +9,11 @@ import {
   TextInput,
   View,
 } from 'react-native';
-
-type PatientSearchResult = {
-  id: number;
-  name: string;
-  email: string;
-  isRequested: boolean;
-};
-
-const DUMMY_PATIENTS: PatientSearchResult[] = [
-  {
-    id: 1,
-    name: '홍길동',
-    email: 'hong@example.com',
-    isRequested: false,
-  },
-  {
-    id: 2,
-    name: '김민수',
-    email: 'minsu@example.com',
-    isRequested: false,
-  },
-  {
-    id: 3,
-    name: '이지은',
-    email: 'jieun@example.com',
-    isRequested: true,
-  },
-  {
-    id: 4,
-    name: '박서준',
-    email: 'seojoon@test.com',
-    isRequested: false,
-  },
-];
+import {
+  PatientSearchResult,
+  requestMatch,
+  searchPatientByEmail,
+} from '../../apis/matchApi';
 
 const PatientRegisterScreen: React.FC = () => {
   const [emailKeyword, setEmailKeyword] = useState<string>('');
@@ -61,18 +32,12 @@ const PatientRegisterScreen: React.FC = () => {
       setLoading(true);
       setSearched(true);
 
-      // TODO:
-      // 서버 연결 시 교체
-      // const response = await api.get("/doctor/patients/search", {
-      //   params: { email: emailKeyword.trim() },
-      // });
-      // setPatients(response.data);
-
-      const result = DUMMY_PATIENTS.filter(patient =>
-        patient.email.toLowerCase().includes(emailKeyword.trim().toLowerCase()),
-      );
-
-      setPatients(result);
+      if (emailKeyword.trim() === '') {
+        setPatients([]);
+        return;
+      }
+      const response = await searchPatientByEmail(emailKeyword.trim());
+      setPatients(response);
     } catch (e) {
       Alert.alert('오류', '환자 검색 중 문제가 발생했습니다.');
     } finally {
@@ -80,18 +45,15 @@ const PatientRegisterScreen: React.FC = () => {
     }
   };
 
-  const handleRequestRegister = async (patientId: number) => {
+  const handleRequestRegister = async (patientEmail: string) => {
     try {
-      // TODO:
-      // 서버 연결 시 교체
-      // await api.post(`/doctor/patients/${patientId}/request`);
-
-      console.log('환자 등록 요청:', patientId);
+      await requestMatch(patientEmail);
+      console.log('환자 등록 요청:', patientEmail);
 
       setPatients(prev =>
         prev.map(patient =>
-          patient.id === patientId
-            ? { ...patient, isRequested: true }
+          patient.email === patientEmail
+            ? { ...patient, matchStatus: 'PENDING' }
             : patient,
         ),
       );
@@ -113,19 +75,20 @@ const PatientRegisterScreen: React.FC = () => {
         <Pressable
           style={({ pressed }) => [
             styles.requestButton,
-            item.isRequested && styles.requestButtonDisabled,
-            pressed && !item.isRequested && styles.pressed,
+            item.matchStatus === 'PENDING' && styles.requestButtonDisabled,
+            pressed && item.matchStatus !== 'PENDING' && styles.pressed,
           ]}
-          disabled={item.isRequested}
-          onPress={() => handleRequestRegister(item.id)}
+          disabled={item.matchStatus === 'PENDING'}
+          onPress={() => handleRequestRegister(item.email)}
         >
           <Text
             style={[
               styles.requestButtonText,
-              item.isRequested && styles.requestButtonDisabledText,
+              item.matchStatus === 'PENDING' &&
+                styles.requestButtonDisabledText,
             ]}
           >
-            {item.isRequested ? '요청됨' : '등록 요청'}
+            {item.matchStatus === 'PENDING' ? '요청됨' : '등록 요청'}
           </Text>
         </Pressable>
       </View>
@@ -136,7 +99,7 @@ const PatientRegisterScreen: React.FC = () => {
     <View style={styles.screen}>
       <FlatList
         data={patients}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.userId.toString()}
         renderItem={renderItem}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

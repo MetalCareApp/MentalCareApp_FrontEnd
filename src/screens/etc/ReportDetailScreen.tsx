@@ -88,8 +88,14 @@ const DUMMY_REPORT: ReportDetail = {
     { date: '2026-04-27', score: 3 },
     { date: '2026-04-28', score: 5 },
   ],
-  diarySummary:
-    '최근 일주일간 전반적인 감정 상태는 보통에서 긍정적인 방향으로 변화했습니다. 수면 시간이 부족했던 날에는 감정 점수가 낮아지는 경향이 있었고, 복약을 꾸준히 한 날에는 비교적 안정적인 하루를 보낸 것으로 나타났습니다.',
+  diarySummary: `[주요 증상]
+환자는 진료 사이 기간 동안 지속적인 무기력감과 수면 장애를 호소하였으며, 챗봇 대화 분석 결과 PHQ-9 총점 12점으로 중등도 우울 수준에 해당합니다.
+
+[위험요인]
+PHQ-9 세부 항목 중 흥미 저하(2점), 수면 장애(3점), 집중력 저하(2점)가 확인되었습니다. 자해/자살 사고 관련 발언은 감지되지 않았습니다.
+
+[개선요인]
+복약 순응도 71%로 비교적 규칙적으로 복약 중이며, 복약 후 기분이 개선되는 경향이 관찰되었습니다.`,
 };
 
 const screenWidth = Dimensions.get('window').width;
@@ -266,7 +272,7 @@ const ReportDetailScreen: React.FC = () => {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>감정일기 요약</Text>
+          <Text style={styles.sectionTitle}>감정일기 및 챗봇 분석</Text>
           <Text style={styles.summaryText}>{report.diarySummary}</Text>
         </View>
       </ScrollView>

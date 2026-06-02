@@ -1,51 +1,13 @@
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import HospitalCard from '../../components/HospitalCard';
-import Hospital from '../../types/Hospital';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-const DUMMY_HOSPITALS: Hospital[] = [
-  {
-    id: 1,
-    name: '서울마음정신건강의학과의원',
-    address: '서울특별시 강남구 테헤란로 123',
-    district: '강남구',
-    openedAt: '2018-03-12',
-    isFavorite: true,
-  },
-  {
-    id: 2,
-    name: '연세편안정신건강의학과의원',
-    address: '서울특별시 송파구 올림픽로 88',
-    district: '송파구',
-    openedAt: '2020-07-01',
-    isFavorite: true,
-  },
-  {
-    id: 3,
-    name: '한빛정신건강의학과의원',
-    address: '서울특별시 마포구 월드컵북로 45',
-    district: '마포구',
-    openedAt: '2016-11-21',
-    isFavorite: true,
-  },
-  {
-    id: 4,
-    name: '우리동네정신건강의학과의원',
-    address: '서울특별시 강남구 봉은사로 210',
-    district: '강남구',
-    openedAt: '2022-01-17',
-    isFavorite: true,
-  },
-  {
-    id: 5,
-    name: '늘봄의원',
-    address: '서울특별시 서초구 서초대로 302',
-    district: '서초구',
-    openedAt: '2019-09-03',
-    isFavorite: true,
-  },
-];
+import {
+  getFavoriteHospitals,
+  Hospital,
+  likeHospital,
+  unlikeHospital,
+} from '../../apis/hospitalApi';
 
 const FavoriteHospitalsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -61,13 +23,8 @@ const FavoriteHospitalsScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 추후 서버 연동 시 이 부분에서 병원 목록 API 호출
-        // 예시:
-        // const response = await api.get("/hospitals");
-        // setHospitalList(response.data);
-
-        setHospitalList(DUMMY_HOSPITALS);
+        const response = await getFavoriteHospitals();
+        setHospitalList(response);
       } catch (e) {
         setError('병원 목록을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -78,21 +35,32 @@ const FavoriteHospitalsScreen: React.FC = () => {
     fetchHospitalList();
   }, []);
 
-  const handleToggleFavorite = (hospitalId: number) => () => {
+  const filteredHospitalList = useMemo(() => {
+    return hospitalList.filter(hospital => {
+      const matchesKeyword = hospital.name
+        .toLowerCase()
+        .includes(searchKeyword.trim().toLowerCase());
+
+      return matchesKeyword;
+    });
+  }, [hospitalList, searchKeyword]);
+
+  const handleToggleFavorite = (hospitalId: number) => async () => {
+    await likeHospital(hospitalId);
     setHospitalList(prev =>
       prev.map(hospital =>
-        hospital.id === hospitalId
-          ? { ...hospital, isFavorite: !hospital.isFavorite }
-          : hospital,
+        hospital.id === hospitalId ? { ...hospital, liked: true } : hospital,
       ),
     );
+  };
 
-    // TODO:
-    // 추후 서버 연동 시 즐겨찾기 저장/해제 API 호출
-    // 예시:
-    // await api.post(`/hospitals/${hospitalId}/favorite`);
-    // 또는
-    // await api.delete(`/hospitals/${hospitalId}/favorite`);
+  const handleToggleUnFavorite = (hospitalId: number) => async () => {
+    await unlikeHospital(hospitalId);
+    setHospitalList(prev =>
+      prev.map(hospital =>
+        hospital.id === hospitalId ? { ...hospital, liked: false } : hospital,
+      ),
+    );
   };
 
   const handlePressHospital = (hospitalId: number) => () => {
@@ -105,6 +73,7 @@ const FavoriteHospitalsScreen: React.FC = () => {
         item={item}
         handlePressHospital={handlePressHospital(item.id)}
         handleToggleFavorite={handleToggleFavorite(item.id)}
+        handleToggleUnFavorite={handleToggleUnFavorite(item.id)}
       />
     );
   };
@@ -112,7 +81,7 @@ const FavoriteHospitalsScreen: React.FC = () => {
   return (
     <View>
       <FlatList
-        data={hospitalList}
+        data={filteredHospitalList}
         keyExtractor={item => item.id.toString()}
         renderItem={renderHospitalItem}
         contentContainerStyle={styles.listContentContainer}

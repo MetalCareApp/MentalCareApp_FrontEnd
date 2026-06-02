@@ -9,35 +9,16 @@ import {
   View,
 } from 'react-native';
 import dayjs from 'dayjs';
-
-type HospitalRequest = {
-  id: number;
-  hospitalName: string;
-  doctorName: string;
-  requestedAt: string;
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
-};
-
-const DUMMY_REQUESTS: HospitalRequest[] = [
-  {
-    id: 1,
-    hospitalName: '서울마음정신건강의학과의원',
-    doctorName: '김민준',
-    requestedAt: '2026-04-28T14:30:00',
-    status: 'PENDING',
-  },
-  {
-    id: 2,
-    hospitalName: '연세편안정신건강의학과의원',
-    doctorName: '이서연',
-    requestedAt: '2026-04-27T10:15:00',
-    status: 'PENDING',
-  },
-];
+import {
+  acceptMatch,
+  getMyMatches,
+  Match,
+  rejectMatch,
+} from '../../apis/matchApi';
 
 function NotificationScreen() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [requests, setRequests] = useState<HospitalRequest[]>([]);
+  const [requests, setRequests] = useState<Match[]>([]);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
@@ -45,13 +26,8 @@ function NotificationScreen() {
       try {
         setLoading(true);
         setError('');
-
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get("/notifications/hospital-requests");
-        // setRequests(response.data);
-
-        setRequests(DUMMY_REQUESTS);
+        const response = await getMyMatches();
+        setRequests(response);
       } catch (e) {
         setError('알림 목록을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -62,17 +38,13 @@ function NotificationScreen() {
     fetchRequests();
   }, []);
 
-  const handleAccept = async (requestId: number) => {
+  const handleAccept = async (matchId: number) => {
     try {
-      // TODO:
-      // 서버 연결 시 교체
-      // await api.post(`/hospital-requests/${requestId}/accept`);
+      await acceptMatch(matchId);
 
       setRequests(prev =>
         prev.map(request =>
-          request.id === requestId
-            ? { ...request, status: 'ACCEPTED' }
-            : request,
+          request.id === matchId ? { ...request, status: 'ACCEPTED' } : request,
         ),
       );
 
@@ -82,17 +54,13 @@ function NotificationScreen() {
     }
   };
 
-  const handleReject = async (requestId: number) => {
+  const handleReject = async (matchId: number) => {
     try {
-      // TODO:
-      // 서버 연결 시 교체
-      // await api.post(`/hospital-requests/${requestId}/reject`);
+      await rejectMatch(matchId);
 
       setRequests(prev =>
         prev.map(request =>
-          request.id === requestId
-            ? { ...request, status: 'REJECTED' }
-            : request,
+          request.id === matchId ? { ...request, status: 'REJECTED' } : request,
         ),
       );
 
@@ -102,7 +70,7 @@ function NotificationScreen() {
     }
   };
 
-  const renderItem = ({ item }: { item: HospitalRequest }) => {
+  const renderItem = ({ item }: { item: Match }) => {
     const isPending = item.status === 'PENDING';
 
     return (
@@ -113,7 +81,7 @@ function NotificationScreen() {
           <Text style={styles.doctorName}>{item.doctorName} 선생님</Text>
 
           <Text style={styles.requestedAt}>
-            요청일시 {dayjs(item.requestedAt).format('YYYY.MM.DD HH:mm')}
+            요청일시 {dayjs(item.createdAt).format('YYYY.MM.DD HH:mm')}
           </Text>
         </View>
 

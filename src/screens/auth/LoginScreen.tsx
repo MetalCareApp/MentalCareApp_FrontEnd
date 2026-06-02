@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Alert,
   Image,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -12,25 +11,53 @@ import {
 import {
   GoogleSignin,
   statusCodes,
-  User,
 } from '@react-native-google-signin/google-signin';
+import { googleLogin } from '../../apis/authApi';
+import { useNavigation } from '@react-navigation/native';
+import { useUserStore } from '../../stores/user';
+import AppConstants from '../../utils/AppConstants';
+import StorageHelper from '../../utils/StorageHelper';
+import { getMyInfo } from '../../apis/userApi';
 import GoogleIcon from '../../assets/icon/GoogleIcon';
+import { getMyMatches } from '../../apis/matchApi';
+import { useMatchStore } from '../../stores/match';
+import { GOOGLE_IOS_CLIENT_ID, GOOGLE_WEB_CLIENT_ID } from '@env';
 
-type GoogleLoginResult = {
-  user: User;
-  idToken: string | null;
-};
+const LoginScreen = () => {
+  const navigation = useNavigation<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
-function LoginScreen() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setUser, clearUserData } = useUserStore();
+
+  useEffect(() => {
+    StorageHelper.getData(AppConstants.STORAGE_KEYS.LOGIN_TOKEN).then(token => {
+      if (token) {
+        getMyInfo()
+          .then(async info => {
+            setUser({
+              username: info.name,
+              isDoctor: info.role === 'DOCTOR',
+              email: info.email,
+              matchId: info.matchId ?? null,
+            });
+            const matches = await getMyMatches();
+            useMatchStore.getState().setMatches(matches);
+            navigation.replace('main');
+          })
+          .catch(() => {
+            clearUserData();
+            StorageHelper.removeData(AppConstants.STORAGE_KEYS.LOGIN_TOKEN);
+          });
+      } else {
+        clearUserData();
+      }
+    });
+  }, []);
 
   useEffect(() => {
     GoogleSignin.configure({
-      // TODO:
-      // 실제 발급받은 Web Client ID로 교체
-      webClientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
-
-      // iOS 오프라인 액세스나 서버 인증이 필요할 때 사용
+      webClientId: GOOGLE_WEB_CLIENT_ID,
+      iosClientId: GOOGLE_IOS_CLIENT_ID,
       offlineAccess: true,
     });
   }, []);
@@ -39,30 +66,37 @@ function LoginScreen() {
     try {
       setIsLoading(true);
 
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
 
-      const result = await GoogleSignin.signIn();
+      const result: any = await GoogleSignin.signIn();
 
-      // 버전별 응답 형태 차이를 안전하게 처리
-      const user = 'data' in result ? result.data?.user : (result as any).user;
+      console.log('Google signIn result:', result);
+
+      const googleUser = result?.user ?? result?.data?.user;
+
+      if (!googleUser) {
+        throw new Error('구글 사용자 정보를 가져오지 못했습니다.');
+      }
+
       const tokens = await GoogleSignin.getTokens();
 
-      const loginResult: GoogleLoginResult = {
-        user,
-        idToken: tokens.idToken ?? null,
-      };
-
-      // TODO:
-      // 서버 연동 시 이 부분에서 idToken을 서버로 보내 검증/로그인 처리
-      // await api.post("/auth/google", { idToken: loginResult.idToken });
-
-      console.log('구글 로그인 성공:', loginResult);
-
-      Alert.alert(
-        '로그인 성공',
-        `${loginResult.user.user.name ?? '사용자'}님 환영합니다.`,
-      );
+      await googleLogin(tokens.idToken);
+      await getMyInfo().then(async info => {
+        setUser({
+          username: info.name,
+          isDoctor: info.role === 'DOCTOR',
+          email: info.email,
+          matchId: info.matchId ?? null,
+        });
+        const matches = await getMyMatches();
+        useMatchStore.getState().setMatches(matches);
+        navigation.replace('main');
+      });
     } catch (error: any) {
+      console.log('Google login error:', error);
+
       if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
         return;
       }
@@ -77,8 +111,10 @@ function LoginScreen() {
         return;
       }
 
-      Alert.alert('로그인 실패', '구글 로그인 중 문제가 발생했습니다.');
-      console.error('Google login error:', error);
+      Alert.alert(
+        '로그인 실패',
+        error?.message ?? '구글 로그인 중 오류가 발생했습니다.',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -86,46 +122,67 @@ function LoginScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.content}>
-        <Text style={styles.title}>로그인</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>시작하기</Text>
 
-        <View style={styles.logoWrapper}>
-          <Image
-            source={require('../../assets/images/remind_logo.png')}
-            style={{ width: 120, height: 120 }}
-          />
-        </View>
+        <Image
+          style={{
+            width: 120,
+            height: 120,
+            marginBottom: 16,
+            alignSelf: 'center',
+          }}
+          source={require('../../assets/images/remind_logo.png')}
+        />
 
-        <Text style={styles.description}>
+        <Text
+          style={{
+            fontSize: 16,
+            color: '#6B7280',
+            textAlign: 'center',
+            marginBottom: 16,
+          }}
+        >
           구글 계정으로 간편하게 시작하세요.
         </Text>
+
         <Pressable
           style={({ pressed }) => [
             styles.googleButton,
-            pressed && !isLoading && styles.pressed,
-            isLoading && styles.googleButtonDisabled,
+            pressed && styles.pressed,
+            isLoading && styles.disabledButton,
           ]}
           onPress={handleGoogleLogin}
           disabled={isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color="#111827" />
+            <ActivityIndicator color="#111827" />
           ) : (
-            <>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
+            >
               <GoogleIcon />
-              <Text style={styles.googleButtonText}>Google로 로그인</Text>
-            </>
+              <Text style={styles.googleButtonText}>Google로 시작하기</Text>
+            </View>
           )}
         </Pressable>
 
-        <Text style={styles.helperText}>
-          {`로그인 시 서비스 이용약관 및 개인정보처리방침에
-          동의한 것으로 간주됩니다.`}
+        <Text
+          style={{
+            fontSize: 12,
+            color: '#6B7280',
+            textAlign: 'center',
+            marginVertical: 16,
+            marginHorizontal: 20,
+          }}
+        >
+          로그인 시 서비스 이용약관 및 개인정보처리 방침에 동의하는 것으로
+          간주됩니다.
         </Text>
       </View>
     </View>
   );
-}
+};
 
 export default LoginScreen;
 
@@ -136,71 +193,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
-  content: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    paddingHorizontal: 20,
-    paddingVertical: 28,
+  container: {
     borderWidth: 1,
     borderColor: '#E5E7EB',
+    borderRadius: 32,
+    padding: 20,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
     color: '#111827',
     textAlign: 'center',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  logoWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 24,
-  },
-  logoText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2563EB',
+    marginBottom: 16,
   },
   googleButton: {
-    minHeight: 54,
-    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#D1D5DB',
-    flexDirection: 'row',
+    borderRadius: 14,
+    paddingVertical: 16,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    columnGap: 10,
-  },
-  googleButtonDisabled: {
-    opacity: 0.7,
-  },
-  googleIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
   },
   googleButtonText: {
     fontSize: 16,
     fontWeight: '700',
     color: '#111827',
   },
-  helperText: {
-    marginTop: 16,
-    fontSize: 12,
-    lineHeight: 18,
-    color: '#9CA3AF',
-    textAlign: 'center',
+  disabledButton: {
+    opacity: 0.7,
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
 });

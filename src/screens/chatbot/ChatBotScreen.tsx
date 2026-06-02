@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -11,18 +11,24 @@ import {
   View,
 } from 'react-native';
 import dayjs from 'dayjs';
+import {
+  ChatbotResponse,
+  getChatHistory,
+  sendMessageToChatbot,
+} from '../../apis/chatbotApi';
+import AppColor from '../../utils/AppColor';
 
 type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
+  id?: number;
+  role: 'USER' | 'ASSISTANT';
   content: string;
   createdAt: string;
+  risk?: boolean;
 };
 
 const INITIAL_MESSAGES: ChatMessage[] = [
   {
-    id: 'welcome-1',
-    role: 'assistant',
+    role: 'ASSISTANT',
     content:
       '안녕하세요. 필요한 내용을 편하게 입력해주세요. 병원, 복약, 감정 기록 관련 질문도 도와드릴 수 있어요.',
     createdAt: dayjs().toISOString(),
@@ -39,6 +45,14 @@ const ChatbotScreen: React.FC = () => {
   const trimmedInput = useMemo(() => input.trim(), [input]);
   const canSend = trimmedInput.length > 0 && !isSending;
 
+  useEffect(() => {
+    (async () => {
+      await getChatHistory().then(history => {
+        setMessages(history);
+      });
+    })();
+  }, []);
+
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
       flatListRef.current?.scrollToEnd({ animated: true });
@@ -49,8 +63,7 @@ const ChatbotScreen: React.FC = () => {
     if (!canSend) return;
 
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
+      role: 'USER',
       content: trimmedInput,
       createdAt: dayjs().toISOString(),
     };
@@ -65,20 +78,20 @@ const ChatbotScreen: React.FC = () => {
       const reply = await requestChatbotReply(nextMessages);
 
       const assistantMessage: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: reply,
+        role: 'ASSISTANT',
+        content: reply.content,
         createdAt: dayjs().toISOString(),
+        risk: reply.risk,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       const errorMessage: ChatMessage = {
-        id: `assistant-error-${Date.now()}`,
-        role: 'assistant',
+        role: 'ASSISTANT',
         content:
           '답변을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
         createdAt: dayjs().toISOString(),
+        risk: false,
       };
 
       setMessages(prev => [...prev, errorMessage]);
@@ -89,7 +102,7 @@ const ChatbotScreen: React.FC = () => {
   };
 
   const renderItem = ({ item }: { item: ChatMessage }) => {
-    const isUser = item.role === 'user';
+    const isUser = item.role === 'USER';
 
     return (
       <View
@@ -102,12 +115,16 @@ const ChatbotScreen: React.FC = () => {
           style={[
             styles.messageBubble,
             isUser ? styles.userBubble : styles.assistantBubble,
+            !isUser && item.risk
+              ? { backgroundColor: AppColor.text.error, borderColor: '#000000' }
+              : null,
           ]}
         >
           <Text
             style={[
               styles.messageText,
               isUser ? styles.userMessageText : styles.assistantMessageText,
+              !isUser && item.risk ? { color: '#FFFFFF' } : null,
             ]}
           >
             {item.content}
@@ -141,7 +158,7 @@ const ChatbotScreen: React.FC = () => {
       <FlatList
         ref={flatListRef}
         data={messages}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.role + item.createdAt}
         renderItem={renderItem}
         contentContainerStyle={styles.messageListContent}
         showsVerticalScrollIndicator={false}
@@ -181,45 +198,18 @@ const ChatbotScreen: React.FC = () => {
 
 export default ChatbotScreen;
 
-/**
- * 추후 실제 서버 API로 교체할 함수
- * 현재는 더미 응답 반환
- */
 const requestChatbotReply = async (
   messages: ChatMessage[],
-): Promise<string> => {
+): Promise<ChatbotResponse> => {
   const latestUserMessage = [...messages]
     .reverse()
-    .find(message => message.role === 'user');
+    .find(message => message.role === 'USER');
 
-  // TODO:
-  // 실제 서버 연동 시 아래처럼 교체
-  //
-  // const response = await fetch("https://your-api.example.com/chatbot", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     messages: messages.map((message) => ({
-  //       role: message.role,
-  //       content: message.content,
-  //     })),
-  //   }),
-  // });
-  //
-  // if (!response.ok) {
-  //   throw new Error("Failed to fetch chatbot reply");
-  // }
-  //
-  // const data = await response.json();
-  // return data.reply;
-
-  await new Promise(resolve => setTimeout(() => resolve(undefined), 900));
-
-  return latestUserMessage
-    ? `현재는 더미 응답입니다. 방금 입력한 내용은 "${latestUserMessage.content}" 입니다. 나중에 서버를 연결하면 실제 AI 답변으로 바뀝니다.`
-    : '현재는 더미 응답입니다.';
+  if (!latestUserMessage) {
+    throw new Error('No user message found');
+  }
+  const response = await sendMessageToChatbot(latestUserMessage.content);
+  return response;
 };
 
 const styles = StyleSheet.create({
@@ -268,13 +258,13 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     backgroundColor: '#2563EB',
-    borderBottomRightRadius: 6,
+    borderBottomRightRadius: 0,
   },
   assistantBubble: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    borderBottomLeftRadius: 6,
+    borderBottomLeftRadius: 0,
   },
   messageText: {
     fontSize: 15,

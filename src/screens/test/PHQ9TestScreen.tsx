@@ -4,6 +4,7 @@ import TestQuestionCard from '../../components/TestQuestionCard';
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
+import { createPHQ9Examination } from '../../apis/examinationApi';
 
 function PHQ9TestScreen() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function PHQ9TestScreen() {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (scores.length < PHQ9_TEST_QUESTION_DATA.length) {
       Toast.show({
         type: 'error',
@@ -33,7 +34,12 @@ function PHQ9TestScreen() {
       return;
     }
     const totalScore = scores.reduce((sum, s) => sum + s.score, 0);
-    console.log('Total Score:', totalScore);
+    const scoreList: number[] = [];
+    for (let i = 1; i <= scores.length; i++) {
+      const score = scores.filter(s => s.id === i)[0]?.score;
+      scoreList.push(score);
+    }
+    await createPHQ9Examination(scoreList);
     // @ts-ignore
     navigation.navigate('phq9_test_result', { totalScore });
   };

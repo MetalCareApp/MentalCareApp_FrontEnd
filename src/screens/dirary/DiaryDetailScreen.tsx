@@ -12,6 +12,7 @@ import {
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import AppColor from '../../utils/AppColor';
+import { deleteDiary, getDiaryDetail } from '../../apis/diaryApi';
 
 type RootStackParamList = {
   diary_detail: { diaryId: number };
@@ -19,87 +20,41 @@ type RootStackParamList = {
 
 type DiaryDetailRouteProp = RouteProp<RootStackParamList, 'diary_detail'>;
 
-type EmotionType = '좋음' | '보통' | '우울' | '불안' | '화남' | '지침';
+type EmotionType = 'GREAT' | 'GOOD' | 'NORMAL' | 'BAD' | 'VERY_BAD';
 
 type DiaryDetail = {
   id: number;
-  date: string;
+  diaryDate: string;
   emotion: EmotionType;
-  sleepStart: string;
-  sleepEnd: string;
-  sleepHours: string;
-  tookMedicine: boolean;
-  medicineReaction: string;
-  diary: string;
+  sleepStartTime: string;
+  sleepEndTime: string;
+  totalSleepMinutes: number;
+  medicationTaken: boolean;
+  medicationReaction: string;
+  content: string;
+  externalStress: boolean;
   createdAt: string;
   updatedAt: string;
 };
 
-const DUMMY_DIARY_DATA: DiaryDetail[] = [
-  {
-    id: 1,
-    date: '2026-03-12',
-    emotion: '보통',
-    sleepStart: '23:40',
-    sleepEnd: '07:10',
-    sleepHours: '7시간 30분',
-    tookMedicine: true,
-    medicineReaction: '복용 후 약간 졸렸지만 크게 불편하진 않았다.',
-    diary:
-      '오늘은 전반적으로 무난한 하루였다. 오전에는 할 일을 하나씩 처리했고, 오후에는 조금 피곤했지만 계획했던 일들을 어느 정도 끝냈다. 저녁에는 쉬는 시간을 가지면서 컨디션을 정리했다.',
-    createdAt: '2026-03-12T09:30:00',
-    updatedAt: '2026-03-12T10:00:00',
-  },
-  {
-    id: 2,
-    date: '2026-03-11',
-    emotion: '좋음',
-    sleepStart: '00:10',
-    sleepEnd: '08:00',
-    sleepHours: '7시간 50분',
-    tookMedicine: false,
-    medicineReaction: '',
-    diary:
-      '기분이 꽤 좋았던 하루였다. 아침부터 집중이 잘 됐고, 사람들과의 대화도 편안했다. 전체적으로 에너지가 괜찮아서 만족스러웠다.',
-    createdAt: '2026-03-11T20:10:00',
-    updatedAt: '2026-03-11T20:10:00',
-  },
-  {
-    id: 3,
-    date: '2026-03-10',
-    emotion: '불안',
-    sleepStart: '02:00',
-    sleepEnd: '06:30',
-    sleepHours: '4시간 30분',
-    tookMedicine: true,
-    medicineReaction: '속이 조금 울렁거렸고 졸림이 있었다.',
-    diary:
-      '잠을 충분히 못 자서 그런지 하루 종일 마음이 불안정했다. 해야 할 일은 있었지만 집중이 잘 안 됐고, 사소한 일에도 예민하게 반응했다. 저녁에는 최대한 자극을 줄이고 쉬려고 했다.',
-    createdAt: '2026-03-10T22:40:00',
-    updatedAt: '2026-03-10T23:00:00',
-  },
-];
-
 const emotionLabelMap: Record<EmotionType, string> = {
-  좋음: '좋음',
-  보통: '보통',
-  우울: '우울',
-  불안: '불안',
-  화남: '화남',
-  지침: '지침',
+  GREAT: '매우 좋음',
+  GOOD: '좋음',
+  NORMAL: '보통',
+  BAD: '나쁨',
+  VERY_BAD: '매우 나쁨',
 };
 
 const emotionColorMap: Record<EmotionType, string> = {
-  좋음: '#16A34A',
-  보통: '#6B7280',
-  우울: '#2563EB',
-  불안: '#F59E0B',
-  화남: '#DC2626',
-  지침: '#7C3AED',
+  GREAT: '#16A34A',
+  GOOD: '#2563EB',
+  NORMAL: '#6B7280',
+  BAD: '#F59E0B',
+  VERY_BAD: '#DC2626',
 };
 
 const DiaryDetailScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<DiaryDetailRouteProp>();
   const { diaryId } = route.params;
 
@@ -117,27 +72,30 @@ const DiaryDetailScreen: React.FC = () => {
     return dayjs(diaryDetail.updatedAt).format('YYYY.MM.DD HH:mm');
   }, [diaryDetail]);
 
+  const calculatedSleepHours = useMemo(() => {
+    if (!diaryDetail) return '';
+    let start = dayjs(diaryDetail.sleepStartTime);
+    let end = dayjs(diaryDetail.sleepEndTime);
+
+    if (end.isBefore(start)) {
+      end = end.add(1, 'day');
+    }
+
+    const diffMinutes = end.diff(start, 'minute');
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    return `${hours}시간 ${minutes}분`;
+  }, [diaryDetail]);
+
   useEffect(() => {
     const fetchDiaryDetail = async () => {
       try {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 추후 서버 연동 시 이 부분에서 diaryId를 사용해 API 요청
-        // 예시:
-        // const response = await api.get(`/diaries/${diaryId}`);
-        // setDiaryDetail(response.data);
-
-        const foundDiary = DUMMY_DIARY_DATA.find(item => item.id === diaryId);
-
-        if (!foundDiary) {
-          setError('일기 데이터를 찾을 수 없습니다.');
-          setDiaryDetail(null);
-          return;
-        }
-
-        setDiaryDetail(foundDiary);
+        const response = await getDiaryDetail(diaryId);
+        setDiaryDetail(response);
       } catch (e) {
         setError('일기 데이터를 불러오는 중 오류가 발생했습니다.');
         setDiaryDetail(null);
@@ -149,25 +107,20 @@ const DiaryDetailScreen: React.FC = () => {
     fetchDiaryDetail();
   }, [diaryId]);
 
-  const handleRetry = () => {
+  const handleRetry = async () => {
     setLoading(true);
     setError('');
 
-    const foundDiary = DUMMY_DIARY_DATA.find(item => item.id === diaryId);
+    const response = await getDiaryDetail(diaryId);
+    setDiaryDetail(response);
 
-    if (!foundDiary) {
-      setError('일기 데이터를 찾을 수 없습니다.');
-      setDiaryDetail(null);
-      setLoading(false);
-      return;
-    }
-
-    setDiaryDetail(foundDiary);
     setLoading(false);
   };
 
-  const handleDeletePress = () => {
-    Alert.alert('삭제', '서버 연동 후 삭제 기능을 추가할 예정입니다.');
+  const handleDeletePress = async () => {
+    await deleteDiary(diaryId);
+    Alert.alert('삭제 완료', '일기가 삭제되었습니다.');
+    navigation.navigate('diary_calendar');
   };
 
   const handleEditPress = () => {
@@ -213,7 +166,7 @@ const DiaryDetailScreen: React.FC = () => {
       >
         <View style={styles.header}>
           <Text style={styles.headerTitle}>일기 상세</Text>
-          <Text style={styles.headerDate}>{diaryDetail.date}</Text>
+          <Text style={styles.headerDate}>{diaryDetail.diaryDate}</Text>
         </View>
 
         <View style={styles.card}>
@@ -232,31 +185,44 @@ const DiaryDetailScreen: React.FC = () => {
           </View>
 
           <View style={styles.infoGrid}>
-            <InfoItem label="날짜" value={diaryDetail.date} />
-            <InfoItem label="감정" value={diaryDetail.emotion} />
-            <InfoItem label="수면 시작" value={diaryDetail.sleepStart} />
-            <InfoItem label="수면 종료" value={diaryDetail.sleepEnd} />
-            <InfoItem label="총 수면시간" value={diaryDetail.sleepHours} />
+            <InfoItem label="날짜" value={diaryDetail.diaryDate} />
+            <InfoItem
+              label="감정"
+              value={emotionLabelMap[diaryDetail.emotion]}
+            />
+            <InfoItem
+              label="수면 시작"
+              value={dayjs(diaryDetail.sleepStartTime).format('HH:mm')}
+            />
+            <InfoItem
+              label="수면 종료"
+              value={dayjs(diaryDetail.sleepEndTime).format('HH:mm')}
+            />
+            <InfoItem label="총 수면시간" value={calculatedSleepHours} />
+            <InfoItem
+              label="외부 스트레스 요인"
+              value={diaryDetail.externalStress ? '있음' : '없음'}
+            />
             <InfoItem
               label="복약 여부"
-              value={diaryDetail.tookMedicine ? '복용함' : '복용 안 함'}
+              value={diaryDetail.medicationTaken ? '복용함' : '복용 안 함'}
               isLast
             />
           </View>
         </View>
 
-        {diaryDetail.tookMedicine && (
+        {diaryDetail.medicationTaken && (
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>복약 후 반응</Text>
             <Text style={styles.bodyText}>
-              {diaryDetail.medicineReaction || '-'}
+              {diaryDetail.medicationReaction || '-'}
             </Text>
           </View>
         )}
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>오늘의 일기</Text>
-          <Text style={styles.bodyText}>{diaryDetail.diary}</Text>
+          <Text style={styles.bodyText}>{diaryDetail.content}</Text>
         </View>
 
         <View style={styles.card}>

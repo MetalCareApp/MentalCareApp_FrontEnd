@@ -14,23 +14,26 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
 
-export type DiaryEmotion = '좋음' | '보통' | '우울' | '불안' | '화남' | '지침';
+export type DiaryEmotion = '매우 좋음' | '좋음' | '보통' | '나쁨' | '매우 나쁨';
 
 export type DiaryFormValues = {
-  date: Date;
+  diaryDate: Date;
   emotion: string;
-  sleepStart: Date;
-  sleepEnd: Date;
-  tookMedicine: boolean | null;
-  medicineReaction: string;
-  diary: string;
+  sleepStartTime: Date;
+  sleepEndTime: Date;
+  // sleepHours: string;
+  medicationTaken: boolean;
+  medicationReaction: string;
+  content: string;
+  externalStress: boolean;
 };
 
 type FormErrors = {
   emotion?: string;
-  tookMedicine?: string;
-  medicineReaction?: string;
-  diary?: string;
+  medicationTaken?: string;
+  medicationReaction?: string;
+  content?: string;
+  externalStress?: string;
 };
 
 type DiaryFormProps = {
@@ -38,25 +41,33 @@ type DiaryFormProps = {
   initialValues?: Partial<DiaryFormValues>;
   submitButtonText?: string;
   onSubmit: (values: {
-    date: string;
+    diaryDate: string;
     emotion: string;
-    sleepStart: string;
-    sleepEnd: string;
-    sleepHours: string;
-    tookMedicine: boolean;
-    medicineReaction: string;
-    diary: string;
+    sleepStartTime: string;
+    sleepEndTime: string;
+    // sleepHours: string;
+    medicationTaken: boolean;
+    medicationReaction: string;
+    content: string;
+    externalStress: boolean;
   }) => void;
 };
 
 const emotions: DiaryEmotion[] = [
+  '매우 좋음',
   '좋음',
   '보통',
-  '우울',
-  '불안',
-  '화남',
-  '지침',
+  '나쁨',
+  '매우 나쁨',
 ];
+
+const emotionsConvertMap = {
+  '매우 좋음': 'GREAT',
+  좋음: 'GOOD',
+  보통: 'NORMAL',
+  나쁨: 'BAD',
+  '매우 나쁨': 'VERY_BAD',
+};
 
 const defaultSleepStart = dayjs()
   .hour(23)
@@ -77,24 +88,28 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
   submitButtonText,
   onSubmit,
 }) => {
-  const [date, setDate] = useState<Date>(initialValues?.date ?? new Date());
+  const [date, setDate] = useState<Date>(
+    initialValues?.diaryDate ?? new Date(),
+  );
   const [selectedEmotion, setSelectedEmotion] = useState<string>(
     initialValues?.emotion ?? '',
   );
   const [sleepStart, setSleepStart] = useState<Date>(
-    initialValues?.sleepStart ?? defaultSleepStart,
+    initialValues?.sleepStartTime ?? defaultSleepStart,
   );
   const [sleepEnd, setSleepEnd] = useState<Date>(
-    initialValues?.sleepEnd ?? defaultSleepEnd,
+    initialValues?.sleepEndTime ?? defaultSleepEnd,
   );
-  const [tookMedicine, setTookMedicine] = useState<boolean | null>(
-    initialValues?.tookMedicine ?? null,
+  const [medicationTaken, setMedicationTaken] = useState<boolean | null>(
+    initialValues?.medicationTaken ?? null,
   );
-  const [medicineReaction, setMedicineReaction] = useState<string>(
-    initialValues?.medicineReaction ?? '',
+  const [medicationReaction, setMedicationReaction] = useState<string>(
+    initialValues?.medicationReaction ?? '',
   );
-  const [diary, setDiary] = useState<string>(initialValues?.diary ?? '');
-
+  const [content, setContent] = useState<string>(initialValues?.content ?? '');
+  const [externalStress, setExternalStress] = useState<boolean | null>(
+    initialValues?.externalStress ?? null,
+  );
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [showSleepStartPicker, setShowSleepStartPicker] =
     useState<boolean>(false);
@@ -122,10 +137,10 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
   }, [sleepStart, sleepEnd]);
 
   useEffect(() => {
-    if (tookMedicine === false) {
-      setMedicineReaction('');
+    if (medicationTaken === false) {
+      setMedicationReaction('');
     }
-  }, [tookMedicine]);
+  }, [medicationTaken]);
 
   const validateForm = (): boolean => {
     const nextErrors: FormErrors = {};
@@ -134,16 +149,20 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
       nextErrors.emotion = '오늘의 감정을 선택해주세요.';
     }
 
-    if (tookMedicine === null) {
-      nextErrors.tookMedicine = '복약 여부를 선택해주세요.';
+    if (externalStress === null) {
+      nextErrors.externalStress = '외부 스트레스 요인을 선택해주세요.';
     }
 
-    if (tookMedicine === true && !medicineReaction.trim()) {
-      nextErrors.medicineReaction = '복약 후 반응을 입력해주세요.';
+    if (medicationTaken === null) {
+      nextErrors.medicationTaken = '복약 여부를 선택해주세요.';
     }
 
-    if (!diary.trim()) {
-      nextErrors.diary = '오늘의 일기를 입력해주세요.';
+    if (medicationTaken === true && !medicationReaction.trim()) {
+      nextErrors.medicationReaction = '복약 후 반응을 입력해주세요.';
+    }
+
+    if (!content.trim()) {
+      nextErrors.content = '오늘의 일기를 입력해주세요.';
     }
 
     setErrors(nextErrors);
@@ -152,11 +171,18 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
 
   const isFormValid = useMemo((): boolean => {
     if (!selectedEmotion) return false;
-    if (tookMedicine === null) return false;
-    if (tookMedicine === true && !medicineReaction.trim()) return false;
-    if (!diary.trim()) return false;
+    if (externalStress === null) return false;
+    if (medicationTaken === null) return false;
+    if (medicationTaken === true && !medicationReaction.trim()) return false;
+    if (!content.trim()) return false;
     return true;
-  }, [selectedEmotion, tookMedicine, medicineReaction, diary]);
+  }, [
+    selectedEmotion,
+    externalStress,
+    medicationTaken,
+    medicationReaction,
+    content,
+  ]);
 
   const onChangeDate = (
     event: DateTimePickerEvent,
@@ -201,14 +227,18 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
     if (!isValid) return;
 
     onSubmit({
-      date: formatDate(date),
-      emotion: selectedEmotion,
-      sleepStart: formatTime(sleepStart),
-      sleepEnd: formatTime(sleepEnd),
-      sleepHours: calculatedSleepHours,
-      tookMedicine: tookMedicine as boolean,
-      medicineReaction: tookMedicine ? medicineReaction : '',
-      diary,
+      diaryDate: formatDate(date),
+      emotion:
+        emotionsConvertMap[selectedEmotion as keyof typeof emotionsConvertMap],
+      // sleepStartTime: formatTime(sleepStart),
+      // sleepEndTime: formatTime(sleepEnd),
+      // sleepHours: calculatedSleepHours,
+      sleepStartTime: dayjs(sleepStart).format('YYYY-MM-DDTHH:mm'),
+      sleepEndTime: dayjs(sleepEnd).format('YYYY-MM-DDTHH:mm'),
+      medicationTaken: medicationTaken as boolean,
+      medicationReaction: medicationTaken ? medicationReaction : '',
+      content: content.trim(),
+      externalStress: externalStress as boolean,
     });
   };
 
@@ -375,26 +405,85 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>복약 여부</Text>
+          <Text style={styles.label}>외부 스트레스 요인</Text>
           <View style={styles.toggleContainer}>
             <Pressable
               style={({ pressed }) => [
                 styles.toggleButton,
-                tookMedicine === true && styles.toggleButtonSelected,
-                submitted && errors.tookMedicine && styles.inputErrorBorder,
+                externalStress === true && styles.toggleButtonSelected,
+                submitted && errors.externalStress && styles.inputErrorBorder,
                 pressed && styles.pressed,
               ]}
               onPress={() => {
-                setTookMedicine(true);
+                setExternalStress(true);
                 if (submitted) {
-                  setErrors(prev => ({ ...prev, tookMedicine: '' }));
+                  setErrors(prev => ({ ...prev, externalStress: '' }));
                 }
               }}
             >
               <Text
                 style={[
                   styles.toggleText,
-                  tookMedicine === true && styles.toggleTextSelected,
+                  externalStress === true && styles.toggleTextSelected,
+                ]}
+              >
+                있음
+              </Text>
+            </Pressable>
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.toggleButton,
+                externalStress === false && styles.toggleButtonSelected,
+                submitted && errors.externalStress && styles.inputErrorBorder,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => {
+                setExternalStress(false);
+                if (submitted) {
+                  setErrors(prev => ({
+                    ...prev,
+                    externalStress: '',
+                  }));
+                }
+              }}
+            >
+              <Text
+                style={[
+                  styles.toggleText,
+                  externalStress === false && styles.toggleTextSelected,
+                ]}
+              >
+                없음
+              </Text>
+            </Pressable>
+          </View>
+          {submitted && errors.medicationTaken ? (
+            <Text style={styles.errorText}>{errors.medicationTaken}</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.label}>복약 여부</Text>
+          <View style={styles.toggleContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.toggleButton,
+                medicationTaken === true && styles.toggleButtonSelected,
+                submitted && errors.medicationTaken && styles.inputErrorBorder,
+                pressed && styles.pressed,
+              ]}
+              onPress={() => {
+                setMedicationTaken(true);
+                if (submitted) {
+                  setErrors(prev => ({ ...prev, medicationTaken: '' }));
+                }
+              }}
+            >
+              <Text
+                style={[
+                  styles.toggleText,
+                  medicationTaken === true && styles.toggleTextSelected,
                 ]}
               >
                 복용함
@@ -404,17 +493,17 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
             <Pressable
               style={({ pressed }) => [
                 styles.toggleButton,
-                tookMedicine === false && styles.toggleButtonSelected,
-                submitted && errors.tookMedicine && styles.inputErrorBorder,
+                medicationTaken === false && styles.toggleButtonSelected,
+                submitted && errors.medicationTaken && styles.inputErrorBorder,
                 pressed && styles.pressed,
               ]}
               onPress={() => {
-                setTookMedicine(false);
+                setMedicationTaken(false);
                 if (submitted) {
                   setErrors(prev => ({
                     ...prev,
-                    tookMedicine: '',
-                    medicineReaction: '',
+                    medicationTaken: '',
+                    medicationReaction: '',
                   }));
                 }
               }}
@@ -422,35 +511,37 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
               <Text
                 style={[
                   styles.toggleText,
-                  tookMedicine === false && styles.toggleTextSelected,
+                  medicationTaken === false && styles.toggleTextSelected,
                 ]}
               >
                 복용 안 함
               </Text>
             </Pressable>
           </View>
-          {submitted && errors.tookMedicine ? (
-            <Text style={styles.errorText}>{errors.tookMedicine}</Text>
+          {submitted && errors.medicationTaken ? (
+            <Text style={styles.errorText}>{errors.medicationTaken}</Text>
           ) : null}
         </View>
 
-        {tookMedicine === true && (
+        {medicationTaken === true && (
           <View style={styles.section}>
             <Text style={styles.label}>복약 후 반응</Text>
             <TextInput
               style={[
                 styles.input,
                 styles.multilineInput,
-                submitted && errors.medicineReaction && styles.inputErrorBorder,
+                submitted &&
+                  errors.medicationReaction &&
+                  styles.inputErrorBorder,
               ]}
               placeholder="예: 졸림, 속이 메스꺼움, 별다른 변화 없음"
-              value={medicineReaction}
+              value={medicationReaction}
               onChangeText={(text: string) => {
-                setMedicineReaction(text);
+                setMedicationReaction(text);
                 if (submitted) {
                   setErrors(prev => ({
                     ...prev,
-                    medicineReaction: text.trim()
+                    medicationReaction: text.trim()
                       ? ''
                       : '복약 후 반응을 입력해주세요.',
                   }));
@@ -459,8 +550,8 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
               multiline
               textAlignVertical="top"
             />
-            {submitted && errors.medicineReaction ? (
-              <Text style={styles.errorText}>{errors.medicineReaction}</Text>
+            {submitted && errors.medicationReaction ? (
+              <Text style={styles.errorText}>{errors.medicationReaction}</Text>
             ) : null}
           </View>
         )}
@@ -471,24 +562,24 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
             style={[
               styles.input,
               styles.diaryInput,
-              submitted && errors.diary && styles.inputErrorBorder,
+              submitted && errors.content && styles.inputErrorBorder,
             ]}
             placeholder="오늘 있었던 일과 느낀 점을 적어보세요."
-            value={diary}
+            value={content}
             onChangeText={(text: string) => {
-              setDiary(text);
+              setContent(text);
               if (submitted) {
                 setErrors(prev => ({
                   ...prev,
-                  diary: text.trim() ? '' : '오늘의 일기를 입력해주세요.',
+                  content: text.trim() ? '' : '오늘의 일기를 입력해주세요.',
                 }));
               }
             }}
             multiline
             textAlignVertical="top"
           />
-          {submitted && errors.diary ? (
-            <Text style={styles.errorText}>{errors.diary}</Text>
+          {submitted && errors.content ? (
+            <Text style={styles.errorText}>{errors.content}</Text>
           ) : null}
         </View>
 
@@ -589,6 +680,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    columnGap: 12,
   },
   halfWidth: {
     flex: 1,

@@ -8,43 +8,31 @@ import {
   View,
 } from 'react-native';
 import dayjs from 'dayjs';
-
-type MyHospital = {
-  id: number;
-  name: string;
-  address: string;
-  phoneNumber: string;
-  openedAt: string;
-};
-
-const DUMMY_MY_HOSPITAL: MyHospital | null = {
-  id: 1,
-  name: '서울마음정신건강의학과의원',
-  address: '서울특별시 강남구 테헤란로 123',
-  phoneNumber: '02-1234-5678',
-  openedAt: '2018-03-12',
-};
-
-// 병원이 없는 상태 테스트하려면 위 대신 이걸 사용
-// const DUMMY_MY_HOSPITAL: MyHospital | null = null;
+import {
+  cancelMatch,
+  getMatchByMatchId,
+  MyHospital,
+} from '../../apis/matchApi';
+import { useUserStore } from '../../stores/user';
 
 const MyHospitalManageScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [hospital, setHospital] = useState<MyHospital | null>(null);
   const [error, setError] = useState<string>('');
 
+  const { matchId } = useUserStore();
+
   useEffect(() => {
     const fetchMyHospital = async () => {
       try {
-        setLoading(true);
-        setError('');
-
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get("/doctor/my-hospital");
-        // setHospital(response.data);
-
-        setHospital(DUMMY_MY_HOSPITAL);
+        if (matchId) {
+          setLoading(true);
+          setError('');
+          const response = await getMatchByMatchId(matchId);
+          setHospital(response);
+        } else {
+          setHospital(null);
+        }
       } catch (e) {
         setError('나의 병원 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -53,7 +41,7 @@ const MyHospitalManageScreen: React.FC = () => {
     };
 
     fetchMyHospital();
-  }, []);
+  }, [matchId]);
 
   const handleDisconnectHospital = () => {
     if (!hospital) return;
@@ -68,14 +56,17 @@ const MyHospitalManageScreen: React.FC = () => {
         style: 'destructive',
         onPress: async () => {
           try {
-            // TODO:
-            // 서버 연결 시 교체
-            // await api.delete(`/doctor/my-hospital/${hospital.id}`);
-
-            console.log('병원 연결 해제:', hospital.id);
-            setHospital(null);
-
-            Alert.alert('완료', '병원 연결이 해제되었습니다.');
+            if (matchId) {
+              await cancelMatch(matchId);
+              setHospital(null);
+              console.log('병원 연결 해제:', matchId);
+              Alert.alert('완료', '병원 연결이 해제되었습니다.');
+            } else {
+              Alert.alert(
+                '오류',
+                '매칭 번호를 알 수 없습니다. 잠시 후 다시 시도해주세요.',
+              );
+            }
           } catch (e) {
             Alert.alert('오류', '병원 연결 해제 중 문제가 발생했습니다.');
           }
@@ -119,12 +110,13 @@ const MyHospitalManageScreen: React.FC = () => {
             <View style={styles.card}>
               <Text style={styles.sectionTitle}>연결된 병원</Text>
 
-              <InfoItem label="병원명" value={hospital.name} />
+              <InfoItem label="의사명" value={hospital.doctorName} />
+              <InfoItem label="병원명" value={hospital.hospitalName} />
               <InfoItem label="주소" value={hospital.address} />
-              <InfoItem label="전화번호" value={hospital.phoneNumber} />
+              <InfoItem label="전화번호" value={hospital.phone} />
               <InfoItem
                 label="개업일자"
-                value={dayjs(hospital.openedAt).format('YYYY.MM.DD')}
+                value={dayjs(hospital.openingAt).format('YYYY.MM.DD')}
                 isLast
               />
             </View>

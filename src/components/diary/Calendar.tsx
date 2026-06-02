@@ -1,53 +1,76 @@
-import React, { useMemo } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import AppColor from "../../utils/AppColor";
-import { makeCalendarArray } from "../../utils/AppUtils";
-import Day from "./Day";
+import React, { useMemo } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import AppColor from '../../utils/AppColor';
+import { makeCalendarArray } from '../../utils/AppUtils';
+import Day from './Day';
+
+type EmotionType = 'GREAT' | 'GOOD' | 'NORMAL' | 'BAD' | 'VERY_BAD';
+
+export type DiaryData = {
+  id: number;
+  content: string;
+  createdAt: string;
+  diaryDate: string;
+  emotion: EmotionType;
+  emotionScore: 1 | 2 | 3 | 4 | 5;
+  medicationReaction: string;
+  medicationTaken: boolean;
+  sleepEndTime: string;
+  sleepStartTime: string;
+  title: string;
+  totalSleepMinutes: number;
+  updatedAt: string;
+};
+
+type CalendarDayData = null | {
+  [date: string]: { id: number };
+};
 
 interface CalendarProps {
   year: number;
   month: number;
-  data: {
-    [date: string]: { id: number };
-  };
+  data: DiaryData[];
 }
 
-const Calendar = (props: CalendarProps) => {
-  const { year, month, data } = props;
-	const tempData = {
-		"2026-03-01": {
-			id: 1,
-		},
-		"2026-03-02": {
-			id: 2,
-		},
-	}
-  const calendarArray = useMemo(() => {
-    return makeCalendarArray(year, month).map((d) => {
-      if (d === null) return null;
-      if (!tempData[d as keyof typeof tempData]) {
-        return { [d]: {id: 0} };
-      }
-      return { [d]: tempData[d as keyof typeof tempData] };
+const Calendar = ({ year, month, data }: CalendarProps) => {
+  const diaryMap = useMemo(() => {
+    return data.reduce<Record<string, DiaryData>>((acc, diary) => {
+      acc[diary.diaryDate] = diary;
+      return acc;
+    }, {});
+  }, [data]);
+
+  const calendarArray = useMemo<CalendarDayData[]>(() => {
+    return makeCalendarArray(year, month).map(date => {
+      if (date === null) return null;
+
+      const diary = diaryMap[date];
+
+      return {
+        [date]: {
+          id: diary?.id ?? 0,
+        },
+      };
     });
-  }, [year, month, data]);
+  }, [year, month, diaryMap]);
 
   return (
     <View style={styles.container}>
-			<View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 6, marginBottom: 10 }}>	
-				{["일", "월", "화", "수", "목", "금", "토"].map((d) => (
-					<Text key={d} style={{ textAlign: "center", paddingHorizontal: 6, marginHorizontal: 4, fontWeight: "bold", fontSize: 14 }}>
-						{d}
-					</Text>
-				))}
-			</View>
-			<FlatList
-				data={calendarArray}
-				renderItem={({ item }) => <Day date={item} color={AppColor.main} />}
-				numColumns={7}
-				horizontal={false}
-				keyExtractor={(item, index) => index.toString()}
-			/>
+      <View style={styles.weekHeader}>
+        {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+          <Text key={day} style={styles.weekText}>
+            {day}
+          </Text>
+        ))}
+      </View>
+
+      <FlatList
+        data={calendarArray}
+        renderItem={({ item }) => <Day date={item} color={AppColor.main} />}
+        numColumns={7}
+        scrollEnabled={false}
+        keyExtractor={(_, index) => index.toString()}
+      />
     </View>
   );
 };
@@ -61,10 +84,22 @@ const styles = StyleSheet.create({
     padding: 14,
     margin: 20,
 
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 3, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 18,
     elevation: 4,
+  },
+  weekHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 6,
+    marginBottom: 10,
+  },
+  weekText: {
+    flex: 1,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });

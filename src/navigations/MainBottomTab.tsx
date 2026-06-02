@@ -13,6 +13,7 @@ import MyPageStackNav from './MyPageStackNav';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import NotificationIcon from '../assets/icon/NotificationIcon';
 import { useNavigation } from '@react-navigation/native';
+import { useMatchStore } from '../stores/match';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -35,6 +36,8 @@ const myPageTabBarIcon = ({ focused }: { focused: boolean }) => (
 function MainBottomTab() {
   const navigation = useNavigation<any>();
 
+  const { matches } = useMatchStore();
+
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -49,9 +52,13 @@ function MainBottomTab() {
             onPress={() => navigation.navigate('notification_list')}
           >
             <NotificationIcon width={24} height={24} color="black" />
-            <View style={styles.notificationBadge}>
-              <Text style={styles.notificationBadgeText}>1</Text>
-            </View>
+            {matches.length > 0 && (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationBadgeText}>
+                  {matches.length}
+                </Text>
+              </View>
+            )}
           </Pressable>
         ),
         headerRightContainerStyle: {

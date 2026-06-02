@@ -10,6 +10,7 @@ import {
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import DiaryForm, { DiaryFormValues } from '../../components/diary/DiaryForm';
+import { getDiaryDetail, updateDiary } from '../../apis/diaryApi';
 
 type RootStackParamList = {
   diary_edit: { diaryId: number };
@@ -18,44 +19,26 @@ type RootStackParamList = {
 
 type DiaryEditRouteProp = RouteProp<RootStackParamList, 'diary_edit'>;
 
-type DiaryDetail = {
-  id: number;
-  date: string;
-  emotion: string;
-  sleepStart: string;
-  sleepEnd: string;
-  sleepHours: string;
-  tookMedicine: boolean;
-  medicineReaction: string;
-  diary: string;
-};
+// type DiaryDetail = {
+//   id: number;
+//   date: string;
+//   emotion: string;
+//   sleepStart: string;
+//   sleepEnd: string;
+//   sleepHours: string;
+//   tookMedicine: boolean;
+//   medicineReaction: string;
+//   diary: string;
+//   externalStress: boolean;
+// };
 
-const DUMMY_DIARY_DATA: DiaryDetail[] = [
-  {
-    id: 1,
-    date: '2026-03-12',
-    emotion: '보통',
-    sleepStart: '23:40',
-    sleepEnd: '07:10',
-    sleepHours: '7시간 30분',
-    tookMedicine: true,
-    medicineReaction: '복용 후 약간 졸렸지만 크게 불편하진 않았다.',
-    diary:
-      '오늘은 전반적으로 무난한 하루였다. 오전에는 할 일을 하나씩 처리했고, 오후에는 조금 피곤했지만 계획했던 일들을 어느 정도 끝냈다. 저녁에는 쉬는 시간을 가지면서 컨디션을 정리했다.',
-  },
-  {
-    id: 2,
-    date: '2026-03-11',
-    emotion: '좋음',
-    sleepStart: '00:10',
-    sleepEnd: '08:00',
-    sleepHours: '7시간 50분',
-    tookMedicine: false,
-    medicineReaction: '',
-    diary:
-      '기분이 꽤 좋았던 하루였다. 아침부터 집중이 잘 됐고, 사람들과의 대화도 편안했다. 전체적으로 에너지가 괜찮아서 만족스러웠다.',
-  },
-];
+const emotionsConvertMap = {
+  GREAT: '매우 좋음',
+  GOOD: '좋음',
+  NORMAL: '보통',
+  BAD: '나쁨',
+  VERY_BAD: '매우 나쁨',
+};
 
 const DiaryEditScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -74,33 +57,31 @@ const DiaryEditScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연동 시 diaryId로 수정 대상 데이터 조회
-        // const response = await api.get(`/diaries/${diaryId}`);
-        // const data = response.data;
-
-        const data = DUMMY_DIARY_DATA.find(item => item.id === diaryId);
+        const data = await getDiaryDetail(diaryId);
+        console.log('getDiaryDetail API result:', data);
 
         if (!data) {
           setError('수정할 일기 데이터를 찾을 수 없습니다.');
           setInitialValues(null);
           return;
         }
-
+        console.log('aaaa', `${data.diaryDate}, ${data.sleepStartTime}`);
         const mappedValues: DiaryFormValues = {
-          date: dayjs(data.date, 'YYYY-MM-DD').toDate(),
-          emotion: data.emotion,
-          sleepStart: dayjs(
-            `${data.date} ${data.sleepStart}`,
+          diaryDate: dayjs(data.date, 'YYYY-MM-DD').toDate(),
+          emotion:
+            emotionsConvertMap[data.emotion as keyof typeof emotionsConvertMap],
+          sleepStartTime: dayjs(
+            `${data.sleepStartTime}`,
             'YYYY-MM-DD HH:mm',
           ).toDate(),
-          sleepEnd: dayjs(
-            `${data.date} ${data.sleepEnd}`,
+          sleepEndTime: dayjs(
+            `${data.sleepEndTime}`,
             'YYYY-MM-DD HH:mm',
           ).toDate(),
-          tookMedicine: data.tookMedicine,
-          medicineReaction: data.medicineReaction,
-          diary: data.diary,
+          medicationTaken: data.medicationTaken,
+          medicationReaction: data.medicationReaction,
+          content: data.content,
+          externalStress: data.externalStress,
         };
 
         setInitialValues(mappedValues);
@@ -116,33 +97,35 @@ const DiaryEditScreen: React.FC = () => {
   }, [diaryId]);
 
   const handleEdit = async (values: {
-    date: string;
+    diaryDate: string;
     emotion: string;
-    sleepStart: string;
-    sleepEnd: string;
-    sleepHours: string;
-    tookMedicine: boolean;
-    medicineReaction: string;
-    diary: string;
+    sleepStartTime: string;
+    sleepEndTime: string;
+    medicationTaken: boolean;
+    medicationReaction: string;
+    content: string;
+    externalStress: boolean;
   }) => {
     try {
-      // TODO:
-      // 서버 연동 시 수정 API 호출
-      // await api.put(`/diaries/${diaryId}`, values);
+      console.log('handleEdit called with values:', values);
+      await updateDiary(diaryId, values);
 
       console.log('일기 수정:', diaryId, values);
       Alert.alert('수정 완료', '일기가 수정되었습니다.');
       navigation.navigate('diary_detail', { diaryId });
     } catch (error) {
-      Alert.alert('오류', '일기 수정 중 문제가 발생했습니다.');
+      Alert.alert(
+        '오류',
+        `일기 수정 중 문제가 발생했습니다.${JSON.stringify(error)}`,
+      );
     }
   };
 
-  const handleRetry = () => {
+  const handleRetry = async () => {
     setLoading(true);
     setError('');
 
-    const data = DUMMY_DIARY_DATA.find(item => item.id === diaryId);
+    const data = await getDiaryDetail(diaryId);
 
     if (!data) {
       setError('수정할 일기 데이터를 찾을 수 없습니다.');
@@ -152,19 +135,21 @@ const DiaryEditScreen: React.FC = () => {
     }
 
     const mappedValues: DiaryFormValues = {
-      date: dayjs(data.date, 'YYYY-MM-DD').toDate(),
-      emotion: data.emotion,
-      sleepStart: dayjs(
-        `${data.date} ${data.sleepStart}`,
+      diaryDate: dayjs(data.diaryDate, 'YYYY-MM-DD').toDate(),
+      emotion:
+        emotionsConvertMap[data.emotion as keyof typeof emotionsConvertMap],
+      sleepStartTime: dayjs(
+        `${data.diaryDate} ${data.sleepStartTime}`,
         'YYYY-MM-DD HH:mm',
       ).toDate(),
-      sleepEnd: dayjs(
-        `${data.date} ${data.sleepEnd}`,
+      sleepEndTime: dayjs(
+        `${data.diaryDate} ${data.sleepEndTime}`,
         'YYYY-MM-DD HH:mm',
       ).toDate(),
-      tookMedicine: data.tookMedicine,
-      medicineReaction: data.medicineReaction,
-      diary: data.diary,
+      medicationTaken: data.medicationTaken,
+      medicationReaction: data.medicationReaction,
+      content: data.content,
+      externalStress: data.externalStress,
     };
 
     setInitialValues(mappedValues);

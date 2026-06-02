@@ -1,18 +1,22 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import DateCarousel from '../../components/diary/DateCarousel';
-import { useState } from 'react';
-import Calendar from '../../components/diary/Calendar';
-import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import Calendar, { DiaryData } from '../../components/diary/Calendar';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import AppColor from '../../utils/AppColor';
 import PencilIcon from '../../assets/icon/PencilIcon';
+import { getAllDiaryByMonth } from '../../apis/diaryApi';
 
 function DiaryCalendarScreen() {
   const navigation = useNavigation();
+
+  const isFocused = useIsFocused();
 
   const [selectedDate, setSelectedDate] = useState({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
+  const [data, setData] = useState<DiaryData[]>([]);
 
   const onClickCarousel = (direction: 'prev' | 'next') => () => {
     if (direction === 'prev') {
@@ -42,13 +46,30 @@ function DiaryCalendarScreen() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFocused) {
+        const result = await getAllDiaryByMonth(
+          `${selectedDate.year}${String(selectedDate.month).padStart(2, '0')}`,
+        );
+        console.log('Fetched diary data:', result);
+        setData(result);
+      }
+    };
+    fetchData();
+  }, [selectedDate, isFocused]);
+
   return (
     <View style={styles.container}>
       <DateCarousel
         selectedDate={{ year: selectedDate.year, month: selectedDate.month }}
         onClick={onClickCarousel}
       />
-      <Calendar data={{}} year={selectedDate.year} month={selectedDate.month} />
+      <Calendar
+        data={data}
+        year={selectedDate.year}
+        month={selectedDate.month}
+      />
       <Pressable
         style={styles.writeButton}
         onPress={() => navigation.navigate('diary_create' as never)}

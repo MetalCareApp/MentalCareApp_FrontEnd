@@ -2,16 +2,18 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import HeartIcon from '../assets/icon/HeartIcon';
 import AppColor from '../utils/AppColor';
 import dayjs from 'dayjs';
-import Hospital from '../types/Hospital';
+import { Hospital } from '../apis/hospitalApi';
 
 function HospitalCard({
   item,
   handlePressHospital,
   handleToggleFavorite,
+  handleToggleUnFavorite,
 }: {
   item: Hospital;
   handlePressHospital: (hospitalId: number) => void;
   handleToggleFavorite: (hospitalId: number) => void;
+  handleToggleUnFavorite: (hospitalId: number) => void;
 }) {
   return (
     <Pressable
@@ -23,10 +25,14 @@ function HospitalCard({
 
         <Pressable
           style={({ pressed }) => [pressed && styles.pressed]}
-          onPress={() => handleToggleFavorite(item.id)}
+          onPress={() =>
+            item.liked
+              ? handleToggleUnFavorite(item.id)
+              : handleToggleFavorite(item.id)
+          }
         >
           <HeartIcon
-            color={item.isFavorite ? AppColor.main : AppColor.background.gray}
+            color={item.liked ? AppColor.main : AppColor.background.gray}
           />
         </Pressable>
       </View>
@@ -39,13 +45,15 @@ function HospitalCard({
       <View style={styles.infoRow}>
         <Text style={styles.infoLabel}>개업일자</Text>
         <Text style={styles.infoValue}>
-          {dayjs(item.openedAt).format('YYYY.MM.DD')}
+          {dayjs(item.openingDate).format('YYYY.MM.DD')}
         </Text>
       </View>
 
       <View style={styles.badgeWrapper}>
         <View style={styles.districtBadge}>
-          <Text style={styles.districtBadgeText}>{item.district}</Text>
+          <Text style={styles.districtBadgeText}>
+            {item.address.split(' ')[0]}
+          </Text>
         </View>
       </View>
     </Pressable>

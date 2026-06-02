@@ -5,24 +5,40 @@ export type ModeType = 'USER' | 'DOCTOR';
 type UserState = {
   username: string | null;
   isDoctor: boolean; // 의사 계정 보유 여부
+  email: string | null; // 사용자 이메일
   currentMode: ModeType; // 현재 앱 모드
+  matchId: number | null; // 매칭된 병원 ID,
 
   // actions
-  setUser: (username: string, isDoctor: boolean) => void;
+  setUser: (data: {
+    username: string;
+    isDoctor: boolean;
+    email: string | null;
+    matchId: number | null;
+  }) => void;
   switchMode: (mode: ModeType) => void;
-  logout: () => void;
+  clearUserData: () => void;
 };
 
 export const useUserStore = create<UserState>(set => ({
   username: null,
   isDoctor: false,
+  email: null,
   currentMode: 'USER',
+  matchId: null,
 
-  setUser: (username, isDoctor) =>
+  setUser: (data: {
+    username: string;
+    isDoctor: boolean;
+    email: string | null;
+    matchId: number | null;
+  }) =>
     set({
-      username,
-      isDoctor,
-      currentMode: isDoctor ? 'DOCTOR' : 'USER',
+      username: data.username,
+      isDoctor: data.isDoctor,
+      email: data.email,
+      currentMode: data.isDoctor ? 'DOCTOR' : 'USER',
+      matchId: data.matchId,
     }),
 
   switchMode: mode =>
@@ -34,10 +50,12 @@ export const useUserStore = create<UserState>(set => ({
       return { currentMode: mode };
     }),
 
-  logout: () =>
+  clearUserData: () =>
     set({
       username: null,
       isDoctor: false,
+      email: null,
       currentMode: 'USER',
+      matchId: null,
     }),
 }));

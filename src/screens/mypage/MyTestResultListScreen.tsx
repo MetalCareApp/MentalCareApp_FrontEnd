@@ -7,38 +7,7 @@ import {
   View,
 } from 'react-native';
 import dayjs from 'dayjs';
-
-type TestResult = {
-  id: number;
-  testType: string;
-  testedAt: string;
-  score: number;
-  result: string;
-};
-
-const DUMMY_TEST_RESULTS: TestResult[] = [
-  {
-    id: 1,
-    testType: '우울 척도 검사',
-    testedAt: '2026-04-28',
-    score: 12,
-    result: '경도 우울',
-  },
-  {
-    id: 2,
-    testType: '불안 척도 검사',
-    testedAt: '2026-04-22',
-    score: 8,
-    result: '정상 범위',
-  },
-  {
-    id: 3,
-    testType: '불안 척도 검사',
-    testedAt: '2026-04-15',
-    score: 25,
-    result: '중등도 불안',
-  },
-];
+import { getAllExaminations, TestResult } from '../../apis/examinationApi';
 
 const MyTestResultListScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,12 +20,9 @@ const MyTestResultListScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get("/test-results");
-        // setTestResults(response.data);
-
-        setTestResults(DUMMY_TEST_RESULTS);
+        const response = await getAllExaminations();
+        console.log('getAllExaminations API result:', response);
+        setTestResults(response);
       } catch (e) {
         setError('테스트 결과 목록을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -69,7 +35,7 @@ const MyTestResultListScreen: React.FC = () => {
 
   const sortedTestResults = useMemo(() => {
     return [...testResults].sort(
-      (a, b) => dayjs(b.testedAt).valueOf() - dayjs(a.testedAt).valueOf(),
+      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
     );
   }, [testResults]);
 
@@ -77,16 +43,16 @@ const MyTestResultListScreen: React.FC = () => {
     return (
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.testType}>{item.testType}</Text>
+          <Text style={styles.testType}>{item.type}</Text>
           {/* <View style={styles.scoreBadge}>
-            <Text style={styles.scoreBadgeText}>{item.score}점</Text>
+            <Text style={styles.scoreBadgeText}>{item.totalScore}점</Text>
           </View> */}
         </View>
 
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>테스트 일자</Text>
           <Text style={styles.infoValue}>
-            {dayjs(item.testedAt).format('YYYY.MM.DD')}
+            {dayjs(item.createdAt).format('YYYY.MM.DD')}
           </Text>
         </View>
 
@@ -97,7 +63,7 @@ const MyTestResultListScreen: React.FC = () => {
 
         <View style={[styles.infoRow, styles.lastInfoRow]}>
           <Text style={styles.infoLabel}>테스트 결과</Text>
-          <Text style={styles.resultText}>{item.result}</Text>
+          <Text style={styles.resultText}>{item.severity}</Text>
         </View>
       </View>
     );

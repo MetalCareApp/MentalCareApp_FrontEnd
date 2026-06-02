@@ -1,22 +1,38 @@
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useUserStore } from '../../stores/user'; // 경로 맞게 수정
-
-const DUMMY_DATA = {
-  username: '홍길동',
-  isDoctor: true, //TODO - 실제 로그인 시 서버에서 받아와야 함
-};
+import StorageHelper from '../../utils/StorageHelper';
+import AppConstants from '../../utils/AppConstants';
+import { getMyInfo } from '../../apis/userApi';
 
 const MyPageScreen: React.FC = () => {
+  const {
+    username,
+    isDoctor,
+    currentMode,
+    switchMode,
+    setUser,
+    clearUserData,
+  } = useUserStore();
+
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    setUser(DUMMY_DATA.username, DUMMY_DATA.isDoctor);
-  }, []);
+    if (isFocused) {
+      getMyInfo().then(response => {
+        const { name, email, role, matchId } = response;
+        setUser({
+          username: name,
+          email,
+          isDoctor: role === 'DOCTOR',
+          matchId: matchId ?? null,
+        });
+      });
+    }
+  }, [isFocused]);
 
   const navigation = useNavigation<any>();
-
-  const { username, isDoctor, currentMode, switchMode, setUser } =
-    useUserStore();
 
   /* ---------------- 일반 사용자 메뉴 ---------------- */
 
@@ -59,6 +75,13 @@ const MyPageScreen: React.FC = () => {
 
   const handleBackToUserMode = () => {
     switchMode('USER');
+  };
+
+  const logout = () => {
+    StorageHelper.removeData(AppConstants.STORAGE_KEYS.LOGIN_TOKEN).then(() => {
+      clearUserData();
+      navigation.replace('login');
+    });
   };
 
   return (
@@ -121,6 +144,15 @@ const MyPageScreen: React.FC = () => {
             </Text>
           </Pressable>
         )}
+        <Pressable
+          style={({ pressed }) => [
+            styles.logoutButton,
+            pressed && styles.pressed,
+          ]}
+          onPress={logout}
+        >
+          <Text style={styles.logoutButtonText}>로그아웃</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -250,5 +282,19 @@ const styles = StyleSheet.create({
 
   pressed: {
     opacity: 0.7,
+  },
+  logoutButton: {
+    marginTop: 18,
+    backgroundColor: '#FEE2E2',
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 14,
+    paddingVertical: 15,
+    alignItems: 'center',
+  },
+  logoutButtonText: {
+    color: '#DC2626',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

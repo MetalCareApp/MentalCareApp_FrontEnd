@@ -4,6 +4,7 @@ import TestQuestionCard from '../../components/TestQuestionCard';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { createGAD7Examination } from '../../apis/examinationApi';
 
 function GAD7TestScreen() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function GAD7TestScreen() {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (scores.length < GAD7_TEST_QUESTION_DATA.length) {
       Toast.show({
         type: 'error',
@@ -33,6 +34,12 @@ function GAD7TestScreen() {
       return;
     }
     const totalScore = scores.reduce((sum, s) => sum + s.score, 0);
+    const scoreList: number[] = [];
+    for (let i = 1; i <= scores.length; i++) {
+      const score = scores.filter(s => s.id === i)[0]?.score;
+      scoreList.push(score);
+    }
+    await createGAD7Examination(scoreList);
     // @ts-ignore
     navigation.navigate('gad7_test_result', { totalScore });
   };

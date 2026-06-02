@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { doctorSignup } from '../../apis/doctorApi';
 
 type FormErrors = {
   hospitalName?: string;
@@ -61,12 +62,10 @@ const DoctorSignupScreen: React.FC = () => {
       const payload = {
         hospitalName: hospitalName.trim(),
         doctorName: doctorName.trim(),
-        phoneNumber: phoneNumber.trim(),
+        hospitalPhone: phoneNumber.trim(),
       };
 
-      // TODO:
-      // 서버 연결 시 가입 요청 API 호출
-      // await api.post("/doctor/signup-requests", payload);
+      await doctorSignup(payload);
 
       console.log('의사 회원가입 요청:', payload);
 

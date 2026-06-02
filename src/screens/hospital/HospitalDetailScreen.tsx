@@ -12,60 +12,18 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import HeartIcon from '../../assets/icon/HeartIcon';
 import AppColor from '../../utils/AppColor';
+import {
+  getHospitalDetails,
+  HospitalDetail,
+  likeHospital,
+  unlikeHospital,
+} from '../../apis/hospitalApi';
 
 type RootStackParamList = {
   hospital_detail: { hospitalId: number };
 };
 
 type HospitalDetailRouteProp = RouteProp<RootStackParamList, 'hospital_detail'>;
-
-type HospitalDetail = {
-  id: number;
-  name: string;
-  address: string;
-  district: string;
-  openedAt: string;
-  phoneNumber: string;
-  specialistCount: number;
-  generalDoctorCount: number;
-  isFavorite: boolean;
-};
-
-const DUMMY_HOSPITAL_DETAIL_DATA: HospitalDetail[] = [
-  {
-    id: 1,
-    name: '서울마음정신건강의학과의원',
-    address: '서울특별시 강남구 테헤란로 123',
-    district: '강남구',
-    openedAt: '2018-03-12',
-    phoneNumber: '02-1234-5678',
-    specialistCount: 3,
-    generalDoctorCount: 1,
-    isFavorite: false,
-  },
-  {
-    id: 2,
-    name: '연세편안정신건강의학과의원',
-    address: '서울특별시 송파구 올림픽로 88',
-    district: '송파구',
-    openedAt: '2020-07-01',
-    phoneNumber: '02-2222-1111',
-    specialistCount: 2,
-    generalDoctorCount: 0,
-    isFavorite: true,
-  },
-  {
-    id: 3,
-    name: '한빛정신건강의학과의원',
-    address: '서울특별시 마포구 월드컵북로 45',
-    district: '마포구',
-    openedAt: '2016-11-21',
-    phoneNumber: '02-9876-5432',
-    specialistCount: 1,
-    generalDoctorCount: 2,
-    isFavorite: false,
-  },
-];
 
 const HospitalDetailScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -79,8 +37,8 @@ const HospitalDetailScreen: React.FC = () => {
   const [error, setError] = useState<string>('');
 
   const formattedOpenedAt = useMemo(() => {
-    if (!hospitalDetail?.openedAt) return '';
-    return dayjs(hospitalDetail.openedAt).format('YYYY.MM.DD');
+    if (!hospitalDetail?.openingDate) return '';
+    return dayjs(hospitalDetail.openingDate).format('YYYY.MM.DD');
   }, [hospitalDetail]);
 
   useEffect(() => {
@@ -89,23 +47,15 @@ const HospitalDetailScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 추후 서버 연동 시 이 부분에서 hospitalId를 사용해 상세 API 요청
-        // 예시:
-        // const response = await api.get(`/hospitals/${hospitalId}`);
-        // setHospitalDetail(response.data);
+        const response = await getHospitalDetails(hospitalId);
 
-        const foundHospital = DUMMY_HOSPITAL_DETAIL_DATA.find(
-          item => item.id === hospitalId,
-        );
-
-        if (!foundHospital) {
+        if (!response) {
           setError('병원 정보를 찾을 수 없습니다.');
           setHospitalDetail(null);
           return;
         }
 
-        setHospitalDetail(foundHospital);
+        setHospitalDetail(response);
       } catch (e) {
         setError('병원 정보를 불러오는 중 오류가 발생했습니다.');
         setHospitalDetail(null);
@@ -117,42 +67,45 @@ const HospitalDetailScreen: React.FC = () => {
     fetchHospitalDetail();
   }, [hospitalId]);
 
-  const handleRetry = () => {
+  const handleRetry = async () => {
     setLoading(true);
     setError('');
 
-    const foundHospital = DUMMY_HOSPITAL_DETAIL_DATA.find(
-      item => item.id === hospitalId,
-    );
+    const response = await getHospitalDetails(hospitalId);
 
-    if (!foundHospital) {
+    if (!response) {
       setError('병원 정보를 찾을 수 없습니다.');
       setHospitalDetail(null);
       setLoading(false);
       return;
     }
 
-    setHospitalDetail(foundHospital);
+    setHospitalDetail(response);
     setLoading(false);
   };
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = async () => {
     if (!hospitalDetail) return;
-
+    await likeHospital(hospitalId);
     setHospitalDetail(prev => {
       if (!prev) return prev;
       return {
         ...prev,
-        isFavorite: !prev.isFavorite,
+        liked: true,
       };
     });
+  };
 
-    // TODO:
-    // 추후 서버 연동 시 즐겨찾기 저장/해제 API 호출
-    // 예시:
-    // await api.post(`/hospitals/${hospitalId}/favorite`);
-    // 또는
-    // await api.delete(`/hospitals/${hospitalId}/favorite`);
+  const handleToggleUnFavorite = async () => {
+    if (!hospitalDetail) return;
+    await unlikeHospital(hospitalId);
+    setHospitalDetail(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        liked: false,
+      };
+    });
   };
 
   if (loading) {
@@ -196,16 +149,20 @@ const HospitalDetailScreen: React.FC = () => {
             <View style={styles.headerTextWrapper}>
               <Text style={styles.headerTitle}>{hospitalDetail.name}</Text>
               <Text style={styles.headerDistrict}>
-                {hospitalDetail.district}
+                {hospitalDetail.address.split(' ')[0]}
               </Text>
             </View>
             <Pressable
               style={({ pressed }) => [pressed && styles.pressed]}
-              onPress={handleToggleFavorite}
+              onPress={
+                hospitalDetail.liked
+                  ? handleToggleUnFavorite
+                  : handleToggleFavorite
+              }
             >
               <HeartIcon
                 color={
-                  hospitalDetail.isFavorite
+                  hospitalDetail.liked
                     ? AppColor.main
                     : AppColor.background.gray
                 }
@@ -220,11 +177,7 @@ const HospitalDetailScreen: React.FC = () => {
           <InfoItem label="병원명" value={hospitalDetail.name} />
           <InfoItem label="주소" value={hospitalDetail.address} />
           <InfoItem label="개업일자" value={formattedOpenedAt} />
-          <InfoItem
-            label="전화번호"
-            value={hospitalDetail.phoneNumber}
-            isLast
-          />
+          <InfoItem label="전화번호" value={hospitalDetail.phone} isLast />
         </View>
 
         <View style={styles.card}>

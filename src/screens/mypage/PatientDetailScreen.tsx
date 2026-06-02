@@ -15,55 +15,22 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import { getPatientDetail, PatientDetail, Report } from '../../apis/matchApi';
 
 type RootStackParamList = {
-  patient_detail: { patientId: number };
+  patient_detail: { matchId: number };
   report_detail: { reportId: number };
 };
 
 type PatientDetailRouteProp = RouteProp<RootStackParamList, 'patient_detail'>;
 
-type Patient = {
-  id: number;
-  name: string;
-  email: string;
-  registeredAt: string;
-};
-
-type Report = {
-  id: number;
-  date: string;
-};
-
-const DUMMY_PATIENT: Patient = {
-  id: 1,
-  name: '홍길동',
-  email: 'hong@example.com',
-  registeredAt: '2026-04-12',
-};
-
-const DUMMY_REPORTS: Report[] = [
-  {
-    id: 1,
-    date: '2026-04-28',
-  },
-  {
-    id: 2,
-    date: '2026-04-25',
-  },
-  {
-    id: 3,
-    date: '2026-04-20',
-  },
-];
-
 const PatientDetailScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<PatientDetailRouteProp>();
-  const { patientId } = route.params;
+  const { matchId } = route.params;
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<PatientDetail | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
   const [error, setError] = useState<string>('');
 
@@ -77,7 +44,7 @@ const PatientDetailScreen: React.FC = () => {
 
   const sortedReports = useMemo(() => {
     return [...reports].sort(
-      (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf(),
+      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
     );
   }, [reports]);
 
@@ -87,15 +54,9 @@ const PatientDetailScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연결 시 교체
-        // const patientResponse = await api.get(`/doctor/patients/${patientId}`);
-        // const reportResponse = await api.get(`/doctor/patients/${patientId}/reports`);
-        // setPatient(patientResponse.data);
-        // setReports(reportResponse.data);
-
-        setPatient(DUMMY_PATIENT);
-        setReports(DUMMY_REPORTS);
+        const response = await getPatientDetail(matchId);
+        setPatient(response);
+        setReports(response.reports);
       } catch (e) {
         setError('환자 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -104,7 +65,7 @@ const PatientDetailScreen: React.FC = () => {
     };
 
     fetchPatientDetail();
-  }, [patientId]);
+  }, [matchId]);
 
   const handlePressReport = (reportId: number) => {
     navigation.navigate('report_detail', { reportId });
@@ -166,7 +127,7 @@ const PatientDetailScreen: React.FC = () => {
 
     try {
       const payload = {
-        patientId,
+        matchId,
         startDate: dayjs(startDate).format('YYYY-MM-DD'),
         endDate: dayjs(endDate).format('YYYY-MM-DD'),
       };
@@ -180,7 +141,7 @@ const PatientDetailScreen: React.FC = () => {
 
       const newReport: Report = {
         id: Date.now(),
-        date: dayjs().format('YYYY-MM-DD'),
+        createdAt: dayjs().format('YYYY-MM-DD'),
       };
 
       setReports(prev => [newReport, ...prev]);
@@ -212,9 +173,9 @@ const PatientDetailScreen: React.FC = () => {
           <Text style={styles.arrow}>›</Text>
         </View>
 
-        <Text style={styles.reportTitle}>{item.date} 리포트</Text>
+        <Text style={styles.reportTitle}>{item.createdAt} 리포트</Text>
         <Text style={styles.reportDate}>
-          생성일 {dayjs(item.date).format('YYYY.MM.DD')}
+          생성일 {dayjs(item.createdAt).format('YYYY.MM.DD')}
         </Text>
       </Pressable>
     );
@@ -264,7 +225,7 @@ const PatientDetailScreen: React.FC = () => {
               <Text style={styles.patientName}>{patient.name}</Text>
               <Text style={styles.patientEmail}>{patient.email}</Text>
               <Text style={styles.patientRegisteredAt}>
-                등록일 {dayjs(patient.registeredAt).format('YYYY.MM.DD')}
+                등록일 {dayjs(patient.matchCreatedAt).format('YYYY.MM.DD')}
               </Text>
             </View>
 

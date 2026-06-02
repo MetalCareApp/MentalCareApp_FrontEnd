@@ -9,34 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
-
-type Patient = {
-  id: number;
-  name: string;
-  email: string;
-  registeredAt: string;
-};
-
-const DUMMY_PATIENTS: Patient[] = [
-  {
-    id: 1,
-    name: '홍길동',
-    email: 'hong@example.com',
-    registeredAt: '2026-04-12',
-  },
-  {
-    id: 2,
-    name: '김민수',
-    email: 'minsu@example.com',
-    registeredAt: '2026-04-18',
-  },
-  {
-    id: 3,
-    name: '이지은',
-    email: 'jieun@example.com',
-    registeredAt: '2026-04-25',
-  },
-];
+import { getMyPatientList, Patient } from '../../apis/matchApi';
 
 const PatientListScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -51,12 +24,8 @@ const PatientListScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get("/doctor/patients");
-        // setPatients(response.data);
-
-        setPatients(DUMMY_PATIENTS);
+        const response = await getMyPatientList();
+        setPatients(response);
       } catch (e) {
         setError('환자 목록을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -74,15 +43,15 @@ const PatientListScreen: React.FC = () => {
     );
   }, [patients]);
 
-  const handlePressPatient = (patientId: number) => {
-    navigation.navigate('patient_detail', { patientId });
+  const handlePressPatient = (matchId: number) => {
+    navigation.navigate('patient_detail', { matchId });
   };
 
   const renderItem = ({ item }: { item: Patient }) => {
     return (
       <Pressable
         style={({ pressed }) => [styles.card, pressed && styles.pressed]}
-        onPress={() => handlePressPatient(item.id)}
+        onPress={() => handlePressPatient(item.matchId)}
       >
         <View style={styles.cardHeader}>
           <View style={styles.patientInfo}>
@@ -125,7 +94,7 @@ const PatientListScreen: React.FC = () => {
     <View style={styles.screen}>
       <FlatList
         data={sortedPatients}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.matchId.toString()}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
