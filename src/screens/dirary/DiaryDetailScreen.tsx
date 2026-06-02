@@ -13,6 +13,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import AppColor from '../../utils/AppColor';
 import { deleteDiary, getDiaryDetail } from '../../apis/diaryApi';
+import CustomText from '../../components/common/CustomText';
 
 type RootStackParamList = {
   diary_detail: { diaryId: number };
@@ -132,7 +133,9 @@ const DiaryDetailScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color={AppColor.main} />
-        <Text style={styles.loadingText}>일기 데이터를 불러오는 중입니다.</Text>
+        <CustomText style={styles.loadingText}>
+          일기 데이터를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -140,10 +143,12 @@ const DiaryDetailScreen: React.FC = () => {
   if (error || !diaryDetail) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.errorDescription}>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.errorDescription}>
           {error || '일기 데이터를 찾을 수 없습니다.'}
-        </Text>
+        </CustomText>
 
         <Pressable
           style={({ pressed }) => [
@@ -152,7 +157,9 @@ const DiaryDetailScreen: React.FC = () => {
           ]}
           onPress={handleRetry}
         >
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <CustomText weight="700" style={styles.retryButtonText}>
+            다시 시도
+          </CustomText>
         </Pressable>
       </View>
     );
@@ -165,22 +172,28 @@ const DiaryDetailScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>일기 상세</Text>
-          <Text style={styles.headerDate}>{diaryDetail.diaryDate}</Text>
+          <CustomText weight="700" style={styles.headerTitle}>
+            일기 상세
+          </CustomText>
+          <CustomText style={styles.headerDate}>
+            {diaryDetail.diaryDate}
+          </CustomText>
         </View>
 
         <View style={styles.card}>
           <View style={styles.rowBetween}>
-            <Text style={styles.sectionTitle}>오늘의 기록</Text>
+            <CustomText weight="700" style={styles.sectionTitle}>
+              오늘의 기록
+            </CustomText>
             <View
               style={[
                 styles.emotionBadge,
                 { backgroundColor: emotionColorMap[diaryDetail.emotion] },
               ]}
             >
-              <Text style={styles.emotionBadgeText}>
+              <CustomText weight="700" style={styles.emotionBadgeText}>
                 {emotionLabelMap[diaryDetail.emotion]}
-              </Text>
+              </CustomText>
             </View>
           </View>
 
@@ -213,20 +226,26 @@ const DiaryDetailScreen: React.FC = () => {
 
         {diaryDetail.medicationTaken && (
           <View style={styles.card}>
-            <Text style={styles.sectionTitle}>복약 후 반응</Text>
-            <Text style={styles.bodyText}>
+            <CustomText weight="700" style={styles.sectionTitle}>
+              복약 후 반응
+            </CustomText>
+            <CustomText style={styles.bodyText}>
               {diaryDetail.medicationReaction || '-'}
-            </Text>
+            </CustomText>
           </View>
         )}
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>오늘의 일기</Text>
-          <Text style={styles.bodyText}>{diaryDetail.content}</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            오늘의 일기
+          </CustomText>
+          <CustomText style={styles.bodyText}>{diaryDetail.content}</CustomText>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>기록 정보</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            기록 정보
+          </CustomText>
           <InfoItem
             label="생성일시"
             value={formattedCreatedAt}
@@ -243,7 +262,9 @@ const DiaryDetailScreen: React.FC = () => {
             ]}
             onPress={handleEditPress}
           >
-            <Text style={styles.secondaryButtonText}>수정</Text>
+            <CustomText weight="700" style={styles.secondaryButtonText}>
+              수정
+            </CustomText>
           </Pressable>
 
           <Pressable
@@ -253,7 +274,9 @@ const DiaryDetailScreen: React.FC = () => {
             ]}
             onPress={handleDeletePress}
           >
-            <Text style={styles.deleteButtonText}>삭제</Text>
+            <CustomText weight="700" style={styles.deleteButtonText}>
+              삭제
+            </CustomText>
           </Pressable>
         </View>
 
@@ -264,7 +287,9 @@ const DiaryDetailScreen: React.FC = () => {
           ]}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.primaryButtonText}>뒤로가기</Text>
+          <CustomText weight="700" style={styles.primaryButtonText}>
+            뒤로가기
+          </CustomText>
         </Pressable>
       </ScrollView>
     </View>
@@ -284,8 +309,10 @@ const InfoItem: React.FC<InfoItemProps> = ({
 }) => {
   return (
     <View style={[styles.infoItem, isLast && styles.infoItemLast]}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
+      <CustomText style={styles.infoLabel}>{label}</CustomText>
+      <CustomText weight="600" style={styles.infoValue}>
+        {value}
+      </CustomText>
     </View>
   );
 };
@@ -315,7 +342,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -331,7 +358,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -355,7 +382,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 12,
   },
@@ -367,7 +394,7 @@ const styles = StyleSheet.create({
   emotionBadgeText: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   infoGrid: {
     gap: 0,
@@ -388,7 +415,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#111827',
   },
   bodyText: {
@@ -413,7 +440,7 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
   deleteButton: {
@@ -428,7 +455,7 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#DC2626',
   },
   primaryButton: {
@@ -440,7 +467,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   retryButton: {
     backgroundColor: AppColor.main,
@@ -452,7 +479,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: Platform.OS === 'ios' ? 0.7 : 0.85,

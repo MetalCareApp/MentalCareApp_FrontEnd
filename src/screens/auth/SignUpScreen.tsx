@@ -1,9 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import CustomText from '../../components/common/CustomText';
 
 function SignUpScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp Screen</Text>
+      <CustomText weight="700" style={styles.title}>
+        SignUp Screen
+      </CustomText>
     </View>
   );
 }
@@ -23,6 +26,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 });

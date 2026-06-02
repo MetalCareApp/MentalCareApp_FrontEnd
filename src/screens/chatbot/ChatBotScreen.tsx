@@ -17,6 +17,7 @@ import {
   sendMessageToChatbot,
 } from '../../apis/chatbotApi';
 import AppColor from '../../utils/AppColor';
+import CustomText from '../../components/common/CustomText';
 
 type ChatMessage = {
   id?: number;
@@ -120,7 +121,7 @@ const ChatbotScreen: React.FC = () => {
               : null,
           ]}
         >
-          <Text
+          <CustomText
             style={[
               styles.messageText,
               isUser ? styles.userMessageText : styles.assistantMessageText,
@@ -128,15 +129,15 @@ const ChatbotScreen: React.FC = () => {
             ]}
           >
             {item.content}
-          </Text>
-          <Text
+          </CustomText>
+          <CustomText
             style={[
               styles.messageTime,
               isUser ? styles.userMessageTime : styles.assistantMessageTime,
             ]}
           >
             {dayjs(item.createdAt).format('HH:mm')}
-          </Text>
+          </CustomText>
         </View>
       </View>
     );
@@ -149,10 +150,12 @@ const ChatbotScreen: React.FC = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}
     >
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>AI 챗봇</Text>
-        <Text style={styles.headerDescription}>
+        <CustomText weight="700" style={styles.headerTitle}>
+          AI 챗봇
+        </CustomText>
+        <CustomText style={styles.headerDescription}>
           궁금한 내용을 입력하면 AI가 답변해드립니다.
-        </Text>
+        </CustomText>
       </View>
 
       <FlatList
@@ -188,7 +191,9 @@ const ChatbotScreen: React.FC = () => {
           {isSending ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Text style={styles.sendButtonText}>보내기</Text>
+            <CustomText weight="700" style={styles.sendButtonText}>
+              보내기
+            </CustomText>
           )}
         </Pressable>
       </View>
@@ -227,7 +232,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -304,6 +309,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
   },
   sendButton: {
@@ -320,7 +326,7 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: 0.75,

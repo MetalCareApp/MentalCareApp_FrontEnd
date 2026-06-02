@@ -11,6 +11,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import DiaryForm, { DiaryFormValues } from '../../components/diary/DiaryForm';
 import { getDiaryDetail, updateDiary } from '../../apis/diaryApi';
+import CustomText from '../../components/common/CustomText';
 
 type RootStackParamList = {
   diary_edit: { diaryId: number };
@@ -160,7 +161,9 @@ const DiaryEditScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>수정할 일기를 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          수정할 일기를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -168,10 +171,12 @@ const DiaryEditScreen: React.FC = () => {
   if (error || !initialValues) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>
           {error || '수정할 일기 데이터를 찾을 수 없습니다.'}
-        </Text>
+        </CustomText>
 
         <Pressable
           style={({ pressed }) => [
@@ -180,7 +185,9 @@ const DiaryEditScreen: React.FC = () => {
           ]}
           onPress={handleRetry}
         >
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <CustomText weight="700" style={styles.retryButtonText}>
+            다시 시도
+          </CustomText>
         </Pressable>
       </View>
     );
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -229,7 +236,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: 0.7,

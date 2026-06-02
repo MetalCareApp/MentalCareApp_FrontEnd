@@ -15,6 +15,7 @@ import {
   Match,
   rejectMatch,
 } from '../../apis/matchApi';
+import CustomText from '../../components/common/CustomText';
 
 function NotificationScreen() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -76,13 +77,17 @@ function NotificationScreen() {
     return (
       <View style={styles.card}>
         <View style={styles.infoArea}>
-          <Text style={styles.hospitalName}>{item.hospitalName}</Text>
+          <CustomText weight="700" style={styles.hospitalName}>
+            {item.hospitalName}
+          </CustomText>
 
-          <Text style={styles.doctorName}>{item.doctorName} 선생님</Text>
+          <CustomText style={styles.doctorName}>
+            {item.doctorName} 선생님
+          </CustomText>
 
-          <Text style={styles.requestedAt}>
+          <CustomText style={styles.requestedAt}>
             요청일시 {dayjs(item.createdAt).format('YYYY.MM.DD HH:mm')}
-          </Text>
+          </CustomText>
         </View>
 
         {isPending ? (
@@ -94,7 +99,9 @@ function NotificationScreen() {
               ]}
               onPress={() => handleAccept(item.id)}
             >
-              <Text style={styles.acceptButtonText}>수락</Text>
+              <CustomText weight="700" style={styles.acceptButtonText}>
+                수락
+              </CustomText>
             </Pressable>
 
             <Pressable
@@ -104,7 +111,9 @@ function NotificationScreen() {
               ]}
               onPress={() => handleReject(item.id)}
             >
-              <Text style={styles.rejectButtonText}>거절</Text>
+              <CustomText weight="700" style={styles.rejectButtonText}>
+                거절
+              </CustomText>
             </Pressable>
           </View>
         ) : (
@@ -116,7 +125,8 @@ function NotificationScreen() {
                 : styles.rejectedBadge,
             ]}
           >
-            <Text
+            <CustomText
+              weight="700"
               style={[
                 styles.statusText,
                 item.status === 'ACCEPTED'
@@ -125,7 +135,7 @@ function NotificationScreen() {
               ]}
             >
               {item.status === 'ACCEPTED' ? '수락됨' : '거절됨'}
-            </Text>
+            </CustomText>
           </View>
         )}
       </View>
@@ -136,7 +146,9 @@ function NotificationScreen() {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>알림을 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          알림을 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -144,8 +156,10 @@ function NotificationScreen() {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
       </View>
     );
   }
@@ -160,18 +174,22 @@ function NotificationScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.title}>알림</Text>
-            <Text style={styles.description}>
+            <CustomText weight="700" style={styles.title}>
+              알림
+            </CustomText>
+            <CustomText style={styles.description}>
               병원에서 보낸 환자 등록 요청을 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>알림이 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              알림이 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               새로운 환자 등록 요청이 오면 이곳에 표시됩니다.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -196,7 +214,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -221,7 +239,7 @@ const styles = StyleSheet.create({
   },
   hospitalName: {
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -248,7 +266,7 @@ const styles = StyleSheet.create({
   acceptButtonText: {
     color: '#FFFFFF',
     fontSize: 13,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   rejectButton: {
     backgroundColor: '#FEE2E2',
@@ -259,7 +277,7 @@ const styles = StyleSheet.create({
   rejectButtonText: {
     color: '#DC2626',
     fontSize: 13,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   statusBadge: {
     borderRadius: 999,
@@ -274,7 +292,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 13,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   acceptedText: {
     color: '#16A34A',
@@ -297,7 +315,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -307,7 +325,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

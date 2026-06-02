@@ -16,6 +16,7 @@ import DateTimePicker, {
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { getPatientDetail, PatientDetail, Report } from '../../apis/matchApi';
+import CustomText from '../../components/common/CustomText';
 
 type RootStackParamList = {
   patient_detail: { matchId: number };
@@ -167,16 +168,20 @@ const PatientDetailScreen: React.FC = () => {
       >
         <View style={styles.reportTopRow}>
           <View style={styles.reportBadge}>
-            <Text style={styles.reportBadgeText}>리포트 {index + 1}</Text>
+            <CustomText weight="700" style={styles.reportBadgeText}>
+              리포트 {index + 1}
+            </CustomText>
           </View>
 
-          <Text style={styles.arrow}>›</Text>
+          <CustomText style={styles.arrow}>›</CustomText>
         </View>
 
-        <Text style={styles.reportTitle}>{item.createdAt} 리포트</Text>
-        <Text style={styles.reportDate}>
+        <CustomText weight="700" style={styles.reportTitle}>
+          {item.createdAt} 리포트
+        </CustomText>
+        <CustomText style={styles.reportDate}>
           생성일 {dayjs(item.createdAt).format('YYYY.MM.DD')}
-        </Text>
+        </CustomText>
       </Pressable>
     );
   };
@@ -185,7 +190,9 @@ const PatientDetailScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>환자 정보를 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          환자 정보를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -193,10 +200,12 @@ const PatientDetailScreen: React.FC = () => {
   if (error || !patient) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>
           {error || '환자 정보를 찾을 수 없습니다.'}
-        </Text>
+        </CustomText>
       </View>
     );
   }
@@ -218,31 +227,41 @@ const PatientDetailScreen: React.FC = () => {
               ]}
               onPress={handleOpenCreateReportModal}
             >
-              <Text style={styles.createReportButtonText}>리포트 생성</Text>
+              <CustomText weight="700" style={styles.createReportButtonText}>
+                리포트 생성
+              </CustomText>
             </Pressable>
 
             <View style={styles.patientCard}>
-              <Text style={styles.patientName}>{patient.name}</Text>
-              <Text style={styles.patientEmail}>{patient.email}</Text>
-              <Text style={styles.patientRegisteredAt}>
+              <CustomText weight="700" style={styles.patientName}>
+                {patient.name}
+              </CustomText>
+              <CustomText style={styles.patientEmail}>
+                {patient.email}
+              </CustomText>
+              <CustomText style={styles.patientRegisteredAt}>
                 등록일 {dayjs(patient.matchCreatedAt).format('YYYY.MM.DD')}
-              </Text>
+              </CustomText>
             </View>
 
             <View style={styles.reportHeader}>
-              <Text style={styles.sectionTitle}>리포트 목록</Text>
-              <Text style={styles.sectionDescription}>
+              <CustomText weight="700" style={styles.sectionTitle}>
+                리포트 목록
+              </CustomText>
+              <CustomText style={styles.sectionDescription}>
                 최신순으로 정렬된 환자 리포트입니다.
-              </Text>
+              </CustomText>
             </View>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>아직 리포트가 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              아직 리포트가 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               리포트를 생성하면 이곳에서 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -255,13 +274,17 @@ const PatientDetailScreen: React.FC = () => {
       >
         <View style={styles.modalDim}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>리포트 생성</Text>
-            <Text style={styles.modalDescription}>
+            <CustomText weight="700" style={styles.modalTitle}>
+              리포트 생성
+            </CustomText>
+            <CustomText style={styles.modalDescription}>
               리포트에 포함할 기간을 선택해주세요.
-            </Text>
+            </CustomText>
 
             <View style={styles.dateSection}>
-              <Text style={styles.dateLabel}>시작일자</Text>
+              <CustomText weight="600" style={styles.dateLabel}>
+                시작일자
+              </CustomText>
               <Pressable
                 style={({ pressed }) => [
                   styles.dateButton,
@@ -272,9 +295,9 @@ const PatientDetailScreen: React.FC = () => {
                   setShowEndDatePicker(false);
                 }}
               >
-                <Text style={styles.dateButtonText}>
+                <CustomText weight="600" style={styles.dateButtonText}>
                   {dayjs(startDate).format('YYYY-MM-DD')}
-                </Text>
+                </CustomText>
               </Pressable>
 
               {showStartDatePicker && (
@@ -290,7 +313,9 @@ const PatientDetailScreen: React.FC = () => {
             </View>
 
             <View style={styles.dateSection}>
-              <Text style={styles.dateLabel}>종료일자</Text>
+              <CustomText weight="600" style={styles.dateLabel}>
+                종료일자
+              </CustomText>
               <Pressable
                 style={({ pressed }) => [
                   styles.dateButton,
@@ -301,9 +326,9 @@ const PatientDetailScreen: React.FC = () => {
                   setShowStartDatePicker(false);
                 }}
               >
-                <Text style={styles.dateButtonText}>
+                <CustomText weight="600" style={styles.dateButtonText}>
                   {dayjs(endDate).format('YYYY-MM-DD')}
-                </Text>
+                </CustomText>
               </Pressable>
 
               {showEndDatePicker && (
@@ -326,7 +351,9 @@ const PatientDetailScreen: React.FC = () => {
                 ]}
                 onPress={handleCloseModal}
               >
-                <Text style={styles.cancelButtonText}>취소</Text>
+                <CustomText weight="700" style={styles.cancelButtonText}>
+                  취소
+                </CustomText>
               </Pressable>
 
               <Pressable
@@ -336,7 +363,9 @@ const PatientDetailScreen: React.FC = () => {
                 ]}
                 onPress={handleCreateReport}
               >
-                <Text style={styles.submitButtonText}>생성</Text>
+                <CustomText weight="700" style={styles.submitButtonText}>
+                  생성
+                </CustomText>
               </Pressable>
             </View>
           </View>
@@ -371,7 +400,7 @@ const styles = StyleSheet.create({
   createReportButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   patientCard: {
     backgroundColor: '#FFFFFF',
@@ -383,7 +412,7 @@ const styles = StyleSheet.create({
   },
   patientName: {
     fontSize: 22,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -401,7 +430,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -430,7 +459,7 @@ const styles = StyleSheet.create({
   },
   reportBadgeText: {
     fontSize: 12,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#4338CA',
   },
   arrow: {
@@ -440,7 +469,7 @@ const styles = StyleSheet.create({
   reportTitle: {
     marginTop: 14,
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
   reportDate: {
@@ -461,7 +490,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -476,7 +505,7 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 14,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
@@ -491,7 +520,7 @@ const styles = StyleSheet.create({
   dateButtonText: {
     fontSize: 15,
     color: '#111827',
-    fontWeight: '600',
+    // fontWeight: '600',
   },
   datePickerWrapper: {
     marginTop: 10,
@@ -516,7 +545,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#111827',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   submitButton: {
     flex: 1,
@@ -529,7 +558,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   centerContainer: {
     flex: 1,
@@ -546,7 +575,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -556,7 +585,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

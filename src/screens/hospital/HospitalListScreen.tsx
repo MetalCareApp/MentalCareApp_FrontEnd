@@ -17,6 +17,7 @@ import {
   likeHospital,
   unlikeHospital,
 } from '../../apis/hospitalApi';
+import CustomText from '../../components/common/CustomText';
 
 // type RootStackParamList = {
 //   hospital_detail: { hospitalId: number };
@@ -106,7 +107,9 @@ const HospitalListScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>병원 목록을 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          병원 목록을 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -114,8 +117,10 @@ const HospitalListScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
 
         <Pressable
           style={({ pressed }) => [
@@ -129,7 +134,9 @@ const HospitalListScreen: React.FC = () => {
             setLoading(false);
           }}
         >
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <CustomText weight="700" style={styles.retryButtonText}>
+            다시 시도
+          </CustomText>
         </Pressable>
       </View>
     );
@@ -145,10 +152,14 @@ const HospitalListScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={styles.headerContainer}>
-            <Text style={styles.title}>병원 목록</Text>
+            <CustomText weight="700" style={styles.title}>
+              병원 목록
+            </CustomText>
 
             <View style={styles.searchSection}>
-              <Text style={styles.label}>병원명 검색</Text>
+              <CustomText weight="600" style={styles.label}>
+                병원명 검색
+              </CustomText>
               <TextInput
                 style={styles.searchInput}
                 placeholder="병원명을 입력하세요"
@@ -158,7 +169,9 @@ const HospitalListScreen: React.FC = () => {
             </View>
 
             <View style={styles.filterSection}>
-              <Text style={styles.label}>지역 선택</Text>
+              <CustomText weight="600" style={styles.label}>
+                지역 선택
+              </CustomText>
               <View style={styles.pickerWrapper}>
                 <Picker
                   selectedValue={selectedDistrict}
@@ -177,17 +190,19 @@ const HospitalListScreen: React.FC = () => {
               </View>
             </View>
 
-            <Text style={styles.resultCount}>
+            <CustomText style={styles.resultCount}>
               총 {filteredHospitalList.length}개의 병원
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>검색 결과가 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              검색 결과가 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               검색어 또는 지역 조건을 바꿔보세요.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -211,7 +226,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 20,
   },
@@ -223,7 +238,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
@@ -235,6 +250,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
   },
   pickerWrapper: {
@@ -262,13 +278,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: 12,
-  },
-  hospitalName: {
-    flex: 1,
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#111827',
-    marginRight: 12,
   },
   favoriteButton: {
     width: 32,
@@ -308,11 +317,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  districtBadgeText: {
-    color: '#4338CA',
-    fontSize: 12,
-    fontWeight: '600',
-  },
   centerContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',
@@ -328,7 +332,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   emptyContainer: {
     paddingVertical: 48,
@@ -351,7 +355,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

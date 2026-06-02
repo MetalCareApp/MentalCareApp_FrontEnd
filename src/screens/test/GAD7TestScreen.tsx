@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { createGAD7Examination } from '../../apis/examinationApi';
+import CustomText from '../../components/common/CustomText';
 
 function GAD7TestScreen() {
   const navigation = useNavigation();
@@ -47,7 +48,9 @@ function GAD7TestScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>GAD-7 불안 테스트</Text>
+        <CustomText weight="700" style={styles.title}>
+          GAD-7 불안 테스트
+        </CustomText>
       </View>
       <FlatList
         style={styles.listContainer}
@@ -63,7 +66,9 @@ function GAD7TestScreen() {
         keyExtractor={({ id }) => id.toString()}
       />
       <Pressable style={styles.submitButton} onPress={onSubmit}>
-        <Text style={styles.submitButtonText}>결과 보기</Text>
+        <CustomText weight="700" style={styles.submitButtonText}>
+          결과 보기
+        </CustomText>
       </Pressable>
     </View>
   );
@@ -85,7 +90,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   listContainer: {
     width: '100%',
@@ -102,6 +107,6 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 });

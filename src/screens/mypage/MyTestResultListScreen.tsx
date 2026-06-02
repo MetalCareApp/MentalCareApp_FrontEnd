@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import dayjs from 'dayjs';
 import { getAllExaminations, TestResult } from '../../apis/examinationApi';
+import CustomText from '../../components/common/CustomText';
 
 const MyTestResultListScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,27 +44,33 @@ const MyTestResultListScreen: React.FC = () => {
     return (
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.testType}>{item.type}</Text>
+          <CustomText weight="700" style={styles.testType}>
+            {item.type}
+          </CustomText>
           {/* <View style={styles.scoreBadge}>
-            <Text style={styles.scoreBadgeText}>{item.totalScore}점</Text>
+            <CustomText style={styles.scoreBadgeText}>{item.totalScore}점</CustomText>
           </View> */}
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>테스트 일자</Text>
-          <Text style={styles.infoValue}>
+          <CustomText style={styles.infoLabel}>테스트 일자</CustomText>
+          <CustomText weight="600" style={styles.infoValue}>
             {dayjs(item.createdAt).format('YYYY.MM.DD')}
-          </Text>
+          </CustomText>
         </View>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>테스트 점수</Text>
-          <Text style={styles.infoValue}>{item.score}점</Text>
+          <CustomText style={styles.infoLabel}>테스트 점수</CustomText>
+          <CustomText weight="600" style={styles.infoValue}>
+            {item.score}점
+          </CustomText>
         </View>
 
         <View style={[styles.infoRow, styles.lastInfoRow]}>
-          <Text style={styles.infoLabel}>테스트 결과</Text>
-          <Text style={styles.resultText}>{item.severity}</Text>
+          <CustomText style={styles.infoLabel}>테스트 결과</CustomText>
+          <CustomText weight="700" style={styles.resultText}>
+            {item.severity}
+          </CustomText>
         </View>
       </View>
     );
@@ -73,7 +80,9 @@ const MyTestResultListScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>테스트 결과를 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          테스트 결과를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -81,8 +90,10 @@ const MyTestResultListScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
       </View>
     );
   }
@@ -97,18 +108,22 @@ const MyTestResultListScreen: React.FC = () => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.title}>테스트 결과</Text>
-            <Text style={styles.description}>
+            <CustomText weight="700" style={styles.title}>
+              테스트 결과
+            </CustomText>
+            <CustomText style={styles.description}>
               진행한 심리 테스트 결과를 한눈에 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>아직 테스트 결과가 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              아직 테스트 결과가 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               심리 테스트를 완료하면 이곳에서 결과를 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -158,7 +173,7 @@ const styles = StyleSheet.create({
   testType: {
     flex: 1,
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginRight: 12,
   },
@@ -167,11 +182,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 999,
-  },
-  scoreBadgeText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#4338CA',
   },
   infoRow: {
     paddingVertical: 10,
@@ -189,12 +199,12 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#111827',
   },
   resultText: {
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#2563EB',
   },
   centerContainer: {
@@ -212,7 +222,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -222,7 +232,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

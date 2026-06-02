@@ -3,6 +3,7 @@ import HeartIcon from '../assets/icon/HeartIcon';
 import AppColor from '../utils/AppColor';
 import dayjs from 'dayjs';
 import { Hospital } from '../apis/hospitalApi';
+import CustomText from './common/CustomText';
 
 function HospitalCard({
   item,
@@ -21,7 +22,9 @@ function HospitalCard({
       onPress={() => handlePressHospital(item.id)}
     >
       <View style={styles.cardHeader}>
-        <Text style={styles.hospitalName}>{item.name}</Text>
+        <CustomText weight="700" style={styles.hospitalName}>
+          {item.name}
+        </CustomText>
 
         <Pressable
           style={({ pressed }) => [pressed && styles.pressed]}
@@ -38,22 +41,22 @@ function HospitalCard({
       </View>
 
       <View style={styles.infoRow}>
-        <Text style={styles.infoLabel}>주소</Text>
-        <Text style={styles.infoValue}>{item.address}</Text>
+        <CustomText style={styles.infoLabel}>주소</CustomText>
+        <CustomText style={styles.infoValue}>{item.address}</CustomText>
       </View>
 
       <View style={styles.infoRow}>
-        <Text style={styles.infoLabel}>개업일자</Text>
-        <Text style={styles.infoValue}>
+        <CustomText style={styles.infoLabel}>개업일자</CustomText>
+        <CustomText style={styles.infoValue}>
           {dayjs(item.openingDate).format('YYYY.MM.DD')}
-        </Text>
+        </CustomText>
       </View>
 
       <View style={styles.badgeWrapper}>
         <View style={styles.districtBadge}>
-          <Text style={styles.districtBadgeText}>
+          <CustomText weight="600" style={styles.districtBadgeText}>
             {item.address.split(' ')[0]}
-          </Text>
+          </CustomText>
         </View>
       </View>
     </Pressable>
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
   hospitalName: {
     flex: 1,
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginRight: 12,
   },
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
   districtBadgeText: {
     color: '#4338CA',
     fontSize: 12,
-    fontWeight: '600',
+    // fontWeight: '600',
   },
   pressed: {
     opacity: 0.7,

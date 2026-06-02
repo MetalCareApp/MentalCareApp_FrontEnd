@@ -10,6 +10,7 @@ import {
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import CustomText from '../../components/common/CustomText';
 
 type RootStackParamList = {
   report_detail: { reportId: number };
@@ -167,7 +168,9 @@ const ReportDetailScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>리포트를 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          리포트를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -175,10 +178,12 @@ const ReportDetailScreen: React.FC = () => {
   if (error || !report) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>
           {error || '리포트 데이터를 찾을 수 없습니다.'}
-        </Text>
+        </CustomText>
       </View>
     );
   }
@@ -212,16 +217,24 @@ const ReportDetailScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>리포트</Text>
-          <Text style={styles.headerText}>환자명: {report.patientName}</Text>
-          <Text style={styles.headerText}>
+          <CustomText weight="700" style={styles.title}>
+            리포트
+          </CustomText>
+          <CustomText style={styles.headerText}>
+            환자명: {report.patientName}
+          </CustomText>
+          <CustomText style={styles.headerText}>
             생성일: {dayjs(report.createdAt).format('YYYY.MM.DD')}
-          </Text>
+          </CustomText>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>수면 데이터</Text>
-          <Text style={styles.sectionDescription}>일자별 수면 시간</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            수면 데이터
+          </CustomText>
+          <CustomText style={styles.sectionDescription}>
+            일자별 수면 시간
+          </CustomText>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <BarChart
@@ -239,10 +252,12 @@ const ReportDetailScreen: React.FC = () => {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>감정 변화</Text>
-          <Text style={styles.sectionDescription}>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            감정 변화
+          </CustomText>
+          <CustomText style={styles.sectionDescription}>
             1점 매우 나쁨 · 3점 보통 · 5점 매우 좋음
-          </Text>
+          </CustomText>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <LineChart
@@ -259,21 +274,29 @@ const ReportDetailScreen: React.FC = () => {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>복약률</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            복약률
+          </CustomText>
 
           <View style={styles.medicationBox}>
-            <Text style={styles.medicationRate}>{medicationRate}%</Text>
-            <Text style={styles.medicationDescription}>
+            <CustomText weight="700" style={styles.medicationRate}>
+              {medicationRate}%
+            </CustomText>
+            <CustomText style={styles.medicationDescription}>
               전체 {report.medicationData.length}일 중{' '}
               {report.medicationData.filter(item => item.tookMedicine).length}일
               복약 성공
-            </Text>
+            </CustomText>
           </View>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>감정일기 및 챗봇 분석</Text>
-          <Text style={styles.summaryText}>{report.diarySummary}</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            감정일기 및 챗봇 분석
+          </CustomText>
+          <CustomText style={styles.summaryText}>
+            {report.diarySummary}
+          </CustomText>
         </View>
       </ScrollView>
     </View>
@@ -296,7 +319,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 10,
   },
@@ -315,7 +338,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -333,7 +356,7 @@ const styles = StyleSheet.create({
   },
   medicationRate: {
     fontSize: 42,
-    fontWeight: '800',
+    // fontWeight: '800',
     color: '#2563EB',
     marginBottom: 8,
   },
@@ -361,7 +384,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

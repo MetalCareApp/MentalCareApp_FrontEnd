@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import CustomText from '../../components/common/CustomText';
 
 type Report = {
   id: number;
@@ -77,17 +78,21 @@ const MyReportListScreen: React.FC = () => {
       >
         <View style={styles.cardTopRow}>
           <View style={styles.numberBadge}>
-            <Text style={styles.numberBadgeText}>리포트 ID {item.id}</Text>
+            <CustomText weight="700" style={styles.numberBadgeText}>
+              리포트 ID {item.id}
+            </CustomText>
           </View>
 
-          <Text style={styles.arrow}>›</Text>
+          <CustomText style={styles.arrow}>›</CustomText>
         </View>
 
-        <Text style={styles.reportTitle}>{item.date} 리포트</Text>
+        <CustomText weight="700" style={styles.reportTitle}>
+          {item.date} 리포트
+        </CustomText>
 
-        <Text style={styles.reportDate}>
+        <CustomText style={styles.reportDate}>
           생성일 {dayjs(item.date).format('YYYY.MM.DD')}
-        </Text>
+        </CustomText>
       </Pressable>
     );
   };
@@ -96,7 +101,9 @@ const MyReportListScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>리포트 목록을 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          리포트 목록을 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -104,8 +111,10 @@ const MyReportListScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
       </View>
     );
   }
@@ -121,20 +130,24 @@ const MyReportListScreen: React.FC = () => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.title}>나의 리포트</Text>
+            <CustomText weight="700" style={styles.title}>
+              나의 리포트
+            </CustomText>
 
-            <Text style={styles.description}>
+            <CustomText style={styles.description}>
               생성된 리포트를 날짜별로 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>아직 리포트가 없습니다</Text>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              아직 리포트가 없습니다
+            </CustomText>
 
-            <Text style={styles.emptyDescription}>
+            <CustomText style={styles.emptyDescription}>
               리포트가 생성되면 이곳에서 볼 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -161,7 +174,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -195,7 +208,7 @@ const styles = StyleSheet.create({
 
   numberBadgeText: {
     fontSize: 12,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#4338CA',
   },
 
@@ -207,7 +220,7 @@ const styles = StyleSheet.create({
   reportTitle: {
     marginTop: 14,
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
 
@@ -230,7 +243,7 @@ const styles = StyleSheet.create({
 
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
 
@@ -241,7 +254,7 @@ const styles = StyleSheet.create({
 
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

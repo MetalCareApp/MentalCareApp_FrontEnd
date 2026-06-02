@@ -22,6 +22,7 @@ import GoogleIcon from '../../assets/icon/GoogleIcon';
 import { getMyMatches } from '../../apis/matchApi';
 import { useMatchStore } from '../../stores/match';
 import { GOOGLE_IOS_CLIENT_ID, GOOGLE_WEB_CLIENT_ID } from '@env';
+import CustomText from '../../components/common/CustomText';
 
 const LoginScreen = () => {
   const navigation = useNavigation<any>();
@@ -123,7 +124,9 @@ const LoginScreen = () => {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        <Text style={styles.title}>시작하기</Text>
+        <CustomText weight="700" style={styles.title}>
+          시작하기
+        </CustomText>
 
         <Image
           style={{
@@ -135,7 +138,7 @@ const LoginScreen = () => {
           source={require('../../assets/images/remind_logo.png')}
         />
 
-        <Text
+        <CustomText
           style={{
             fontSize: 16,
             color: '#6B7280',
@@ -144,7 +147,7 @@ const LoginScreen = () => {
           }}
         >
           구글 계정으로 간편하게 시작하세요.
-        </Text>
+        </CustomText>
 
         <Pressable
           style={({ pressed }) => [
@@ -162,12 +165,14 @@ const LoginScreen = () => {
               style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
             >
               <GoogleIcon />
-              <Text style={styles.googleButtonText}>Google로 시작하기</Text>
+              <CustomText weight="700" style={styles.googleButtonText}>
+                Google로 시작하기
+              </CustomText>
             </View>
           )}
         </Pressable>
 
-        <Text
+        <CustomText
           style={{
             fontSize: 12,
             color: '#6B7280',
@@ -178,7 +183,7 @@ const LoginScreen = () => {
         >
           로그인 시 서비스 이용약관 및 개인정보처리 방침에 동의하는 것으로
           간주됩니다.
-        </Text>
+        </CustomText>
       </View>
     </View>
   );
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     textAlign: 'center',
     marginBottom: 16,
@@ -217,7 +222,7 @@ const styles = StyleSheet.create({
   },
   googleButtonText: {
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
   disabledButton: {

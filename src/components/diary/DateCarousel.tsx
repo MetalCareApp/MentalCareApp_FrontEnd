@@ -1,32 +1,42 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import CustomText from '../common/CustomText';
 
 interface MonthCarouselProps {
   selectedDate: {
     year: number;
     month: number;
   };
-  onClick: (direction: "prev" | "next") => () => void;
+  onClick: (direction: 'prev' | 'next') => () => void;
 }
 
-function MonthCarousel(props: MonthCarouselProps){
+function MonthCarousel(props: MonthCarouselProps) {
   const { selectedDate, onClick } = props;
   return (
     <View style={styles.container}>
-      <Pressable onPress={onClick("prev")}>
-        <Text style={styles.carouselButton}>{"〈"}</Text>
+      <Pressable onPress={onClick('prev')}>
+        <CustomText style={styles.carouselButton}>{'〈'}</CustomText>
       </Pressable>
-      <View style={{ display: "flex", flexDirection: 'row', alignItems: "center" }}>
-        <Text style={styles.text}>{selectedDate.year + "년"}</Text>
-        <Text style={[styles.text, { width: 46, textAlign: "right" }]}>
-          {selectedDate.month + "월"}
-        </Text>
+      <View
+        style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+      >
+        <CustomText weight="700" style={styles.text}>
+          {selectedDate.year + '년'}
+        </CustomText>
+        <CustomText
+          weight="700"
+          style={[styles.text, { width: 46, textAlign: 'right' }]}
+        >
+          {selectedDate.month + '월'}
+        </CustomText>
       </View>
-      <Pressable onPress={onClick("next")}>
-        <Text style={styles.carouselButton}>{"〉"}</Text>
+      <Pressable onPress={onClick('next')}>
+        <CustomText weight="700" style={styles.carouselButton}>
+          {'〉'}
+        </CustomText>
       </Pressable>
     </View>
   );
-};
+}
 
 export default MonthCarousel;
 
@@ -39,10 +49,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   carouselButton: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 20,
-  }
+  },
 });

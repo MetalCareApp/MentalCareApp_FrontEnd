@@ -1,4 +1,5 @@
 import { Text, View, StyleSheet, Pressable } from 'react-native';
+import CustomText from './common/CustomText';
 
 interface TestQuestionCardProps {
   id: number;
@@ -16,8 +17,8 @@ function TestQuestionCard({
   return (
     <View style={styles.container}>
       <View style={styles.questionContainer}>
-        <Text>{`${id}. `}</Text>
-        <Text>{question}</Text>
+        <CustomText>{`${id}. `}</CustomText>
+        <CustomText>{question}</CustomText>
       </View>
       <View style={styles.answerContainer}>
         <Pressable
@@ -25,28 +26,28 @@ function TestQuestionCard({
           onPress={onSetScore && onSetScore(id, 0)}
         >
           <View style={[styles.checkbox, score === 0 && styles.checked]} />
-          <Text>전혀 아니다</Text>
+          <CustomText>전혀 아니다</CustomText>
         </Pressable>
         <Pressable
           style={styles.answerOption}
           onPress={onSetScore && onSetScore(id, 1)}
         >
           <View style={[styles.checkbox, score === 1 && styles.checked]} />
-          <Text>며칠 동안</Text>
+          <CustomText>며칠 동안</CustomText>
         </Pressable>
         <Pressable
           style={styles.answerOption}
           onPress={onSetScore && onSetScore(id, 2)}
         >
           <View style={[styles.checkbox, score === 2 && styles.checked]} />
-          <Text>일주일 이상</Text>
+          <CustomText>일주일 이상</CustomText>
         </Pressable>
         <Pressable
           style={styles.answerOption}
           onPress={onSetScore && onSetScore(id, 3)}
         >
           <View style={[styles.checkbox, score === 3 && styles.checked]} />
-          <Text>거의 매일</Text>
+          <CustomText>거의 매일</CustomText>
         </Pressable>
       </View>
     </View>

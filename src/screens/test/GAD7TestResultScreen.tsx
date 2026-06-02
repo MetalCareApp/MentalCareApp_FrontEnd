@@ -2,6 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
 import { GAD7_TEST_RESULT_DATA } from '../../utils/TestData';
 import { useEffect, useState } from 'react';
+import CustomText from '../../components/common/CustomText';
 
 function GAD7TestResultScreen() {
   const route = useRoute();
@@ -18,19 +19,21 @@ function GAD7TestResultScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>GAD-7 테스트 결과</Text>
-      <Text style={styles.score}>총 점수: {totalScore}</Text>
-      <Text style={styles.level}>
+      <CustomText weight="700" style={styles.title}>
+        GAD-7 테스트 결과
+      </CustomText>
+      <CustomText style={styles.score}>총 점수: {totalScore}</CustomText>
+      <CustomText style={styles.level}>
         불안 수준:{' '}
         {resultDataIndex !== null
           ? GAD7_TEST_RESULT_DATA[resultDataIndex].tag
           : '결과 없음'}
-      </Text>
-      <Text style={styles.explanation}>
+      </CustomText>
+      <CustomText style={styles.explanation}>
         {resultDataIndex !== null
           ? GAD7_TEST_RESULT_DATA[resultDataIndex].result
           : '결과 없음'}
-      </Text>
+      </CustomText>
     </View>
   );
 }
@@ -46,7 +49,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   score: {
     fontSize: 18,

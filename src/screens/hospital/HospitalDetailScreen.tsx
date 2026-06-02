@@ -18,6 +18,7 @@ import {
   likeHospital,
   unlikeHospital,
 } from '../../apis/hospitalApi';
+import CustomText from '../../components/common/CustomText';
 
 type RootStackParamList = {
   hospital_detail: { hospitalId: number };
@@ -112,7 +113,9 @@ const HospitalDetailScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>병원 정보를 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          병원 정보를 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -120,10 +123,12 @@ const HospitalDetailScreen: React.FC = () => {
   if (error || !hospitalDetail) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>
           {error || '병원 정보를 찾을 수 없습니다.'}
-        </Text>
+        </CustomText>
 
         <Pressable
           style={({ pressed }) => [
@@ -132,7 +137,9 @@ const HospitalDetailScreen: React.FC = () => {
           ]}
           onPress={handleRetry}
         >
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <CustomText weight="700" style={styles.retryButtonText}>
+            다시 시도
+          </CustomText>
         </Pressable>
       </View>
     );
@@ -147,10 +154,12 @@ const HospitalDetailScreen: React.FC = () => {
         <View style={styles.header}>
           <View style={styles.headerTopRow}>
             <View style={styles.headerTextWrapper}>
-              <Text style={styles.headerTitle}>{hospitalDetail.name}</Text>
-              <Text style={styles.headerDistrict}>
+              <CustomText weight="700" style={styles.headerTitle}>
+                {hospitalDetail.name}
+              </CustomText>
+              <CustomText style={styles.headerDistrict}>
                 {hospitalDetail.address.split(' ')[0]}
-              </Text>
+              </CustomText>
             </View>
             <Pressable
               style={({ pressed }) => [pressed && styles.pressed]}
@@ -172,7 +181,9 @@ const HospitalDetailScreen: React.FC = () => {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>기본 정보</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            기본 정보
+          </CustomText>
 
           <InfoItem label="병원명" value={hospitalDetail.name} />
           <InfoItem label="주소" value={hospitalDetail.address} />
@@ -181,7 +192,9 @@ const HospitalDetailScreen: React.FC = () => {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>의료진 정보</Text>
+          <CustomText weight="700" style={styles.sectionTitle}>
+            의료진 정보
+          </CustomText>
 
           <InfoItem
             label="전문의 수"
@@ -201,7 +214,9 @@ const HospitalDetailScreen: React.FC = () => {
           ]}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.primaryButtonText}>뒤로가기</Text>
+          <CustomText weight="700" style={styles.primaryButtonText}>
+            뒤로가기
+          </CustomText>
         </Pressable>
       </ScrollView>
     </View>
@@ -221,8 +236,10 @@ const InfoItem: React.FC<InfoItemProps> = ({
 }) => {
   return (
     <View style={[styles.infoItem, isLast && styles.infoItemLast]}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
+      <CustomText style={styles.infoLabel}>{label}</CustomText>
+      <CustomText weight="600" style={styles.infoValue}>
+        {value}
+      </CustomText>
     </View>
   );
 };
@@ -253,7 +270,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -268,7 +285,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   header: {
     marginBottom: 18,
@@ -284,7 +301,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -302,7 +319,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 12,
   },
@@ -322,7 +339,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#111827',
     lineHeight: 22,
   },
@@ -336,7 +353,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: AppColor.white,
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: 0.7,

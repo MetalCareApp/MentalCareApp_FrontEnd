@@ -14,6 +14,7 @@ import {
   MyHospital,
 } from '../../apis/matchApi';
 import { useUserStore } from '../../stores/user';
+import CustomText from '../../components/common/CustomText';
 
 const MyHospitalManageScreen: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -79,9 +80,9 @@ const MyHospitalManageScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>
+        <CustomText style={styles.helperText}>
           나의 병원 정보를 불러오는 중입니다.
-        </Text>
+        </CustomText>
       </View>
     );
   }
@@ -89,8 +90,10 @@ const MyHospitalManageScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
       </View>
     );
   }
@@ -99,16 +102,20 @@ const MyHospitalManageScreen: React.FC = () => {
     <View style={styles.screen}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>나의 병원 관리</Text>
-          <Text style={styles.description}>
+          <CustomText weight="700" style={styles.title}>
+            나의 병원 관리
+          </CustomText>
+          <CustomText style={styles.description}>
             연결된 병원 정보를 확인하고 관리할 수 있습니다.
-          </Text>
+          </CustomText>
         </View>
 
         {hospital ? (
           <>
             <View style={styles.card}>
-              <Text style={styles.sectionTitle}>연결된 병원</Text>
+              <CustomText weight="700" style={styles.sectionTitle}>
+                연결된 병원
+              </CustomText>
 
               <InfoItem label="의사명" value={hospital.doctorName} />
               <InfoItem label="병원명" value={hospital.hospitalName} />
@@ -128,15 +135,19 @@ const MyHospitalManageScreen: React.FC = () => {
               ]}
               onPress={handleDisconnectHospital}
             >
-              <Text style={styles.disconnectButtonText}>병원 연결 끊기</Text>
+              <CustomText weight="700" style={styles.disconnectButtonText}>
+                병원 연결 끊기
+              </CustomText>
             </Pressable>
           </>
         ) : (
           <View style={styles.emptyCard}>
-            <Text style={styles.emptyTitle}>연결된 병원이 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              연결된 병원이 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               아직 내 계정과 연결된 병원이 없습니다.
-            </Text>
+            </CustomText>
           </View>
         )}
       </View>
@@ -159,8 +170,10 @@ const InfoItem: React.FC<InfoItemProps> = ({
 }) => {
   return (
     <View style={[styles.infoItem, isLast && styles.infoItemLast]}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
+      <CustomText style={styles.infoLabel}>{label}</CustomText>
+      <CustomText weight="600" style={styles.infoValue}>
+        {value}
+      </CustomText>
     </View>
   );
 };
@@ -178,7 +191,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -196,7 +209,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 12,
   },
@@ -216,7 +229,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#111827',
     lineHeight: 22,
   },
@@ -232,7 +245,7 @@ const styles = StyleSheet.create({
   disconnectButtonText: {
     color: '#DC2626',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   emptyCard: {
     backgroundColor: '#FFFFFF',
@@ -244,7 +257,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -269,7 +282,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

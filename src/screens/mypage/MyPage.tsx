@@ -5,6 +5,7 @@ import { useUserStore } from '../../stores/user'; // 경로 맞게 수정
 import StorageHelper from '../../utils/StorageHelper';
 import AppConstants from '../../utils/AppConstants';
 import { getMyInfo } from '../../apis/userApi';
+import CustomText from '../../components/common/CustomText';
 
 const MyPageScreen: React.FC = () => {
   const {
@@ -88,11 +89,13 @@ const MyPageScreen: React.FC = () => {
     <View style={styles.screen}>
       {/* 헤더 */}
       <View style={styles.header}>
-        <Text style={styles.userName}>{username ?? '사용자'}</Text>
+        <CustomText weight="700" style={styles.userName}>
+          {username ?? '사용자'}
+        </CustomText>
 
-        <Text style={styles.userSubText}>
+        <CustomText style={styles.userSubText}>
           {currentMode === 'DOCTOR' ? '의사 모드' : '일반 사용자'}
-        </Text>
+        </CustomText>
       </View>
 
       {/* 메뉴 */}
@@ -129,7 +132,9 @@ const MyPageScreen: React.FC = () => {
             ]}
             onPress={handleBackToUserMode}
           >
-            <Text style={styles.secondaryButtonText}>일반 모드로 돌아가기</Text>
+            <CustomText weight="700" style={styles.secondaryButtonText}>
+              일반 모드로 돌아가기
+            </CustomText>
           </Pressable>
         ) : (
           <Pressable
@@ -139,9 +144,9 @@ const MyPageScreen: React.FC = () => {
             ]}
             onPress={handleDoctorSwitch}
           >
-            <Text style={styles.primaryButtonText}>
+            <CustomText weight="700" style={styles.primaryButtonText}>
               {isDoctor ? '의사 모드로 전환하기' : '의사 회원으로 전환하기'}
-            </Text>
+            </CustomText>
           </Pressable>
         )}
         <Pressable
@@ -151,7 +156,9 @@ const MyPageScreen: React.FC = () => {
           ]}
           onPress={logout}
         >
-          <Text style={styles.logoutButtonText}>로그아웃</Text>
+          <CustomText weight="700" style={styles.logoutButtonText}>
+            로그아웃
+          </CustomText>
         </Pressable>
       </View>
     </View>
@@ -182,8 +189,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
       ]}
       onPress={onPress}
     >
-      <Text style={styles.menuText}>{title}</Text>
-      <Text style={styles.arrow}>›</Text>
+      <CustomText weight="500" style={styles.menuText}>
+        {title}
+      </CustomText>
+      <CustomText style={styles.arrow}>›</CustomText>
     </Pressable>
   );
 };
@@ -207,7 +216,7 @@ const styles = StyleSheet.create({
 
   userName: {
     fontSize: 22,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -241,7 +250,7 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 16,
     color: '#111827',
-    fontWeight: '500',
+    // fontWeight: '500',
   },
 
   arrow: {
@@ -264,7 +273,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
 
   secondaryButton: {
@@ -277,7 +286,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     color: '#111827',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
 
   pressed: {
@@ -295,6 +304,6 @@ const styles = StyleSheet.create({
   logoutButtonText: {
     color: '#DC2626',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
 });

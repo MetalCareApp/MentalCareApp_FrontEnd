@@ -1,6 +1,15 @@
 import { ReactElement } from 'react';
-import { StyleSheet, Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import AppColor from '../../utils/AppColor';
+import CustomText from './CustomText';
 
 interface CTextInputProps {
   wrapperStyle?: ViewStyle;
@@ -8,8 +17,8 @@ interface CTextInputProps {
   endAdornment?: ReactElement;
   error?: boolean;
   helperText?: string;
-  helperTextStyle?: TextStyle,
-  notErrorHelperText?: string,
+  helperTextStyle?: TextStyle;
+  notErrorHelperText?: string;
 }
 
 export default function CTextInput({
@@ -25,11 +34,21 @@ export default function CTextInput({
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
       <View style={[styles.container, containerStyle]}>
-        <TextInput  {...rest} style={[{ flex: 1 }, rest.style]} />
+        <TextInput {...rest} style={[{ flex: 1 }, rest.style]} />
         {endAdornment && endAdornment}
       </View>
-      {error && helperText && <Text style={[styles.helperText, helperTextStyle]}>{helperText}</Text>}
-      {notErrorHelperText && <Text style={[styles.helperText, { color: AppColor.text.success }]}>{notErrorHelperText}</Text>}
+      {error && helperText && (
+        <CustomText style={[styles.helperText, helperTextStyle]}>
+          {helperText}
+        </CustomText>
+      )}
+      {notErrorHelperText && (
+        <CustomText
+          style={[styles.helperText, { color: AppColor.text.success }]}
+        >
+          {notErrorHelperText}
+        </CustomText>
+      )}
     </View>
   );
 }

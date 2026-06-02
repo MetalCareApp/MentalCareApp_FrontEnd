@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { doctorSignup } from '../../apis/doctorApi';
+import CustomText from '../../components/common/CustomText';
 
 type FormErrors = {
   hospitalName?: string;
@@ -84,15 +85,19 @@ const DoctorSignupScreen: React.FC = () => {
     <View style={styles.screen}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>의사 회원가입</Text>
-          <Text style={styles.description}>
+          <CustomText weight="700" style={styles.title}>
+            의사 회원가입
+          </CustomText>
+          <CustomText style={styles.description}>
             병원과 의사 정보를 입력해주세요.
-          </Text>
+          </CustomText>
         </View>
 
         <View style={styles.form}>
           <View style={styles.section}>
-            <Text style={styles.label}>병원명</Text>
+            <CustomText weight="600" style={styles.label}>
+              병원명
+            </CustomText>
             <TextInput
               style={[
                 styles.input,
@@ -111,12 +116,16 @@ const DoctorSignupScreen: React.FC = () => {
               }}
             />
             {submitted && errors.hospitalName ? (
-              <Text style={styles.errorText}>{errors.hospitalName}</Text>
+              <CustomText style={styles.errorText}>
+                {errors.hospitalName}
+              </CustomText>
             ) : null}
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.label}>이름</Text>
+            <CustomText weight="600" style={styles.label}>
+              이름
+            </CustomText>
             <TextInput
               style={[
                 styles.input,
@@ -135,12 +144,16 @@ const DoctorSignupScreen: React.FC = () => {
               }}
             />
             {submitted && errors.doctorName ? (
-              <Text style={styles.errorText}>{errors.doctorName}</Text>
+              <CustomText style={styles.errorText}>
+                {errors.doctorName}
+              </CustomText>
             ) : null}
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.label}>전화번호</Text>
+            <CustomText weight="600" style={styles.label}>
+              전화번호
+            </CustomText>
             <TextInput
               style={[
                 styles.input,
@@ -162,7 +175,9 @@ const DoctorSignupScreen: React.FC = () => {
               keyboardType="phone-pad"
             />
             {submitted && errors.phoneNumber ? (
-              <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+              <CustomText style={styles.errorText}>
+                {errors.phoneNumber}
+              </CustomText>
             ) : null}
           </View>
 
@@ -175,7 +190,9 @@ const DoctorSignupScreen: React.FC = () => {
             disabled={!isFormValid}
             onPress={handleSubmit}
           >
-            <Text style={styles.submitButtonText}>가입 요청하기</Text>
+            <CustomText weight="700" style={styles.submitButtonText}>
+              가입 요청하기
+            </CustomText>
           </Pressable>
         </View>
       </View>
@@ -198,7 +215,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -219,7 +236,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
@@ -231,6 +248,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
   },
   inputErrorBorder: {
@@ -254,7 +272,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: 0.7,

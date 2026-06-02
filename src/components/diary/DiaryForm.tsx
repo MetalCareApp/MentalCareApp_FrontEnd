@@ -13,6 +13,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
+import CustomText from '../common/CustomText';
 
 export type DiaryEmotion = '매우 좋음' | '좋음' | '보통' | '나쁨' | '매우 나쁨';
 
@@ -248,12 +249,14 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>
+        <CustomText weight="700" style={styles.title}>
           {mode === 'create' ? '오늘 기록하기' : '일기 수정하기'}
-        </Text>
+        </CustomText>
 
         <View style={styles.section}>
-          <Text style={styles.label}>날짜</Text>
+          <CustomText weight="600" style={styles.label}>
+            날짜
+          </CustomText>
           <Pressable
             style={({ pressed }) => [
               styles.pickerButton,
@@ -265,7 +268,9 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
               setShowSleepEndPicker(false);
             }}
           >
-            <Text style={styles.pickerButtonText}>{formatDate(date)}</Text>
+            <CustomText style={styles.pickerButtonText}>
+              {formatDate(date)}
+            </CustomText>
           </Pressable>
 
           {showDatePicker && (
@@ -281,7 +286,9 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>오늘의 감정</Text>
+          <CustomText weight="600" style={styles.label}>
+            오늘의 감정
+          </CustomText>
           <View
             style={[
               styles.pickerWrapper,
@@ -307,16 +314,20 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
             </Picker>
           </View>
           {submitted && errors.emotion ? (
-            <Text style={styles.errorText}>{errors.emotion}</Text>
+            <CustomText style={styles.errorText}>{errors.emotion}</CustomText>
           ) : null}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>수면 시간</Text>
+          <CustomText weight="600" style={styles.label}>
+            수면 시간
+          </CustomText>
 
           <View style={styles.row}>
             <View style={styles.halfWidth}>
-              <Text style={styles.subLabel}>수면 시작 시간</Text>
+              <CustomText weight="500" style={styles.subLabel}>
+                수면 시작 시간
+              </CustomText>
               <Pressable
                 style={({ pressed }) => [
                   styles.pickerButton,
@@ -328,14 +339,16 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                   setShowDatePicker(false);
                 }}
               >
-                <Text style={styles.pickerButtonText}>
+                <CustomText style={styles.pickerButtonText}>
                   {formatTime(sleepStart)}
-                </Text>
+                </CustomText>
               </Pressable>
             </View>
 
             <View style={styles.halfWidth}>
-              <Text style={styles.subLabel}>수면 종료 시간</Text>
+              <CustomText weight="500" style={styles.subLabel}>
+                수면 종료 시간
+              </CustomText>
               <Pressable
                 style={({ pressed }) => [
                   styles.pickerButton,
@@ -347,9 +360,9 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                   setShowDatePicker(false);
                 }}
               >
-                <Text style={styles.pickerButtonText}>
+                <CustomText style={styles.pickerButtonText}>
                   {formatTime(sleepEnd)}
-                </Text>
+                </CustomText>
               </Pressable>
             </View>
           </View>
@@ -399,13 +412,19 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
           )}
 
           <View style={styles.sleepSummaryBox}>
-            <Text style={styles.sleepSummaryLabel}>총 수면시간</Text>
-            <Text style={styles.sleepSummaryValue}>{calculatedSleepHours}</Text>
+            <CustomText style={styles.sleepSummaryLabel}>
+              총 수면시간
+            </CustomText>
+            <CustomText weight="700" style={styles.sleepSummaryValue}>
+              {calculatedSleepHours}
+            </CustomText>
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>외부 스트레스 요인</Text>
+          <CustomText weight="600" style={styles.label}>
+            외부 스트레스 요인
+          </CustomText>
           <View style={styles.toggleContainer}>
             <Pressable
               style={({ pressed }) => [
@@ -421,14 +440,15 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                 }
               }}
             >
-              <Text
+              <CustomText
+                weight="600"
                 style={[
                   styles.toggleText,
                   externalStress === true && styles.toggleTextSelected,
                 ]}
               >
                 있음
-              </Text>
+              </CustomText>
             </Pressable>
 
             <Pressable
@@ -448,23 +468,28 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                 }
               }}
             >
-              <Text
+              <CustomText
+                weight="600"
                 style={[
                   styles.toggleText,
                   externalStress === false && styles.toggleTextSelected,
                 ]}
               >
                 없음
-              </Text>
+              </CustomText>
             </Pressable>
           </View>
           {submitted && errors.medicationTaken ? (
-            <Text style={styles.errorText}>{errors.medicationTaken}</Text>
+            <CustomText style={styles.errorText}>
+              {errors.medicationTaken}
+            </CustomText>
           ) : null}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>복약 여부</Text>
+          <CustomText weight="600" style={styles.label}>
+            복약 여부
+          </CustomText>
           <View style={styles.toggleContainer}>
             <Pressable
               style={({ pressed }) => [
@@ -480,14 +505,15 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                 }
               }}
             >
-              <Text
+              <CustomText
+                weight="600"
                 style={[
                   styles.toggleText,
                   medicationTaken === true && styles.toggleTextSelected,
                 ]}
               >
                 복용함
-              </Text>
+              </CustomText>
             </Pressable>
 
             <Pressable
@@ -508,24 +534,29 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
                 }
               }}
             >
-              <Text
+              <CustomText
+                weight="600"
                 style={[
                   styles.toggleText,
                   medicationTaken === false && styles.toggleTextSelected,
                 ]}
               >
                 복용 안 함
-              </Text>
+              </CustomText>
             </Pressable>
           </View>
           {submitted && errors.medicationTaken ? (
-            <Text style={styles.errorText}>{errors.medicationTaken}</Text>
+            <CustomText style={styles.errorText}>
+              {errors.medicationTaken}
+            </CustomText>
           ) : null}
         </View>
 
         {medicationTaken === true && (
           <View style={styles.section}>
-            <Text style={styles.label}>복약 후 반응</Text>
+            <CustomText weight="600" style={styles.label}>
+              복약 후 반응
+            </CustomText>
             <TextInput
               style={[
                 styles.input,
@@ -551,13 +582,17 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
               textAlignVertical="top"
             />
             {submitted && errors.medicationReaction ? (
-              <Text style={styles.errorText}>{errors.medicationReaction}</Text>
+              <CustomText style={styles.errorText}>
+                {errors.medicationReaction}
+              </CustomText>
             ) : null}
           </View>
         )}
 
         <View style={styles.section}>
-          <Text style={styles.label}>오늘의 일기</Text>
+          <CustomText weight="600" style={styles.label}>
+            오늘의 일기
+          </CustomText>
           <TextInput
             style={[
               styles.input,
@@ -579,7 +614,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
             textAlignVertical="top"
           />
           {submitted && errors.content ? (
-            <Text style={styles.errorText}>{errors.content}</Text>
+            <CustomText style={styles.errorText}>{errors.content}</CustomText>
           ) : null}
         </View>
 
@@ -592,9 +627,9 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
           onPress={handleSubmit}
           disabled={!isFormValid}
         >
-          <Text style={styles.submitButtonText}>
+          <CustomText weight="700" style={styles.submitButtonText}>
             {submitButtonText ?? (mode === 'create' ? '저장하기' : '수정하기')}
-          </Text>
+          </CustomText>
         </Pressable>
       </ScrollView>
     </View>
@@ -614,7 +649,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 24,
   },
@@ -623,13 +658,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
   subLabel: {
     fontSize: 13,
-    fontWeight: '500',
+    // fontWeight: '500',
     color: '#6B7280',
     marginBottom: 6,
   },
@@ -641,6 +676,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
   },
   multilineInput: {
@@ -711,7 +747,7 @@ const styles = StyleSheet.create({
   },
   sleepSummaryValue: {
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
   },
   toggleContainer: {
@@ -733,7 +769,7 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     fontSize: 14,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
   },
   toggleTextSelected: {
@@ -760,7 +796,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   pressed: {
     opacity: 0.7,

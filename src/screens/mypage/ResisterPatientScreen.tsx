@@ -14,6 +14,7 @@ import {
   requestMatch,
   searchPatientByEmail,
 } from '../../apis/matchApi';
+import CustomText from '../../components/common/CustomText';
 
 const PatientRegisterScreen: React.FC = () => {
   const [emailKeyword, setEmailKeyword] = useState<string>('');
@@ -68,8 +69,10 @@ const PatientRegisterScreen: React.FC = () => {
     return (
       <View style={styles.patientCard}>
         <View style={styles.patientInfo}>
-          <Text style={styles.patientName}>{item.name}</Text>
-          <Text style={styles.patientEmail}>{item.email}</Text>
+          <CustomText weight="700" style={styles.patientName}>
+            {item.name}
+          </CustomText>
+          <CustomText style={styles.patientEmail}>{item.email}</CustomText>
         </View>
 
         <Pressable
@@ -81,7 +84,8 @@ const PatientRegisterScreen: React.FC = () => {
           disabled={item.matchStatus === 'PENDING'}
           onPress={() => handleRequestRegister(item.email)}
         >
-          <Text
+          <CustomText
+            weight="700"
             style={[
               styles.requestButtonText,
               item.matchStatus === 'PENDING' &&
@@ -89,7 +93,7 @@ const PatientRegisterScreen: React.FC = () => {
             ]}
           >
             {item.matchStatus === 'PENDING' ? '요청됨' : '등록 요청'}
-          </Text>
+          </CustomText>
         </Pressable>
       </View>
     );
@@ -106,13 +110,17 @@ const PatientRegisterScreen: React.FC = () => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.title}>환자 등록</Text>
-            <Text style={styles.description}>
+            <CustomText weight="700" style={styles.title}>
+              환자 등록
+            </CustomText>
+            <CustomText style={styles.description}>
               환자의 이메일을 검색한 뒤 등록 요청을 보낼 수 있습니다.
-            </Text>
+            </CustomText>
 
             <View style={styles.searchBox}>
-              <Text style={styles.label}>환자 이메일</Text>
+              <CustomText weight="600" style={styles.label}>
+                환자 이메일
+              </CustomText>
 
               <View style={styles.searchRow}>
                 <TextInput
@@ -138,33 +146,39 @@ const PatientRegisterScreen: React.FC = () => {
                   {loading ? (
                     <ActivityIndicator size="small" color="#FFFFFF" />
                   ) : (
-                    <Text style={styles.searchButtonText}>검색</Text>
+                    <CustomText weight="700" style={styles.searchButtonText}>
+                      검색
+                    </CustomText>
                   )}
                 </Pressable>
               </View>
             </View>
 
             {searched && (
-              <Text style={styles.resultCount}>
+              <CustomText style={styles.resultCount}>
                 검색 결과 {patients.length}명
-              </Text>
+              </CustomText>
             )}
           </View>
         }
         ListEmptyComponent={
           searched && !loading ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyTitle}>검색 결과가 없습니다</Text>
-              <Text style={styles.emptyDescription}>
+              <CustomText weight="700" style={styles.emptyTitle}>
+                검색 결과가 없습니다
+              </CustomText>
+              <CustomText style={styles.emptyDescription}>
                 이메일을 다시 확인해주세요.
-              </Text>
+              </CustomText>
             </View>
           ) : (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyTitle}>환자를 검색해주세요</Text>
-              <Text style={styles.emptyDescription}>
+              <CustomText weight="700" style={styles.emptyTitle}>
+                환자를 검색해주세요
+              </CustomText>
+              <CustomText style={styles.emptyDescription}>
                 이메일을 입력하면 환자 목록이 표시됩니다.
-              </Text>
+              </CustomText>
             </View>
           )
         }
@@ -189,7 +203,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -208,7 +222,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
@@ -225,6 +239,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
     marginRight: 8,
   },
@@ -243,7 +258,7 @@ const styles = StyleSheet.create({
   searchButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   resultCount: {
     marginTop: 14,
@@ -266,7 +281,7 @@ const styles = StyleSheet.create({
   },
   patientName: {
     fontSize: 16,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -286,7 +301,7 @@ const styles = StyleSheet.create({
   requestButtonText: {
     color: '#FFFFFF',
     fontSize: 13,
-    fontWeight: '700',
+    // fontWeight: '700',
   },
   requestButtonDisabledText: {
     color: '#6B7280',
@@ -297,7 +312,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

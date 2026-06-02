@@ -10,6 +10,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { getMyPatientList, Patient } from '../../apis/matchApi';
+import CustomText from '../../components/common/CustomText';
 
 const PatientListScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -55,18 +56,20 @@ const PatientListScreen: React.FC = () => {
       >
         <View style={styles.cardHeader}>
           <View style={styles.patientInfo}>
-            <Text style={styles.patientName}>{item.name}</Text>
-            <Text style={styles.patientEmail}>{item.email}</Text>
+            <CustomText weight="700" style={styles.patientName}>
+              {item.name}
+            </CustomText>
+            <CustomText style={styles.patientEmail}>{item.email}</CustomText>
           </View>
 
-          <Text style={styles.arrow}>›</Text>
+          <CustomText style={styles.arrow}>›</CustomText>
         </View>
 
         <View style={styles.registeredBox}>
-          <Text style={styles.infoLabel}>등록일</Text>
-          <Text style={styles.infoValue}>
+          <CustomText style={styles.infoLabel}>등록일</CustomText>
+          <CustomText weight="600" style={styles.infoValue}>
             {dayjs(item.registeredAt).format('YYYY.MM.DD')}
-          </Text>
+          </CustomText>
         </View>
       </Pressable>
     );
@@ -76,7 +79,9 @@ const PatientListScreen: React.FC = () => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.helperText}>환자 목록을 불러오는 중입니다.</Text>
+        <CustomText style={styles.helperText}>
+          환자 목록을 불러오는 중입니다.
+        </CustomText>
       </View>
     );
   }
@@ -84,8 +89,10 @@ const PatientListScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorTitle}>불러오지 못했습니다</Text>
-        <Text style={styles.helperText}>{error}</Text>
+        <CustomText weight="700" style={styles.errorTitle}>
+          불러오지 못했습니다
+        </CustomText>
+        <CustomText style={styles.helperText}>{error}</CustomText>
       </View>
     );
   }
@@ -100,18 +107,22 @@ const PatientListScreen: React.FC = () => {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.title}>나의 환자 목록</Text>
-            <Text style={styles.description}>
+            <CustomText weight="700" style={styles.title}>
+              나의 환자 목록
+            </CustomText>
+            <CustomText style={styles.description}>
               등록된 환자 정보를 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>등록된 환자가 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              등록된 환자가 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               환자가 등록되면 이곳에서 확인할 수 있습니다.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -135,7 +146,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -163,7 +174,7 @@ const styles = StyleSheet.create({
   },
   patientName: {
     fontSize: 17,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
   },
@@ -188,7 +199,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#111827',
   },
   centerContainer: {
@@ -206,7 +217,7 @@ const styles = StyleSheet.create({
   },
   errorTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

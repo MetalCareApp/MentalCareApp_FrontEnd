@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import AppColor from '../../utils/AppColor';
 import { makeCalendarArray } from '../../utils/AppUtils';
 import Day from './Day';
+import CustomText from '../common/CustomText';
 
 type EmotionType = 'GREAT' | 'GOOD' | 'NORMAL' | 'BAD' | 'VERY_BAD';
 
@@ -58,9 +59,9 @@ const Calendar = ({ year, month, data }: CalendarProps) => {
     <View style={styles.container}>
       <View style={styles.weekHeader}>
         {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-          <Text key={day} style={styles.weekText}>
+          <CustomText key={day} weight="700" style={styles.weekText}>
             {day}
-          </Text>
+          </CustomText>
         ))}
       </View>
 
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   weekText: {
     flex: 1,
     textAlign: 'center',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 14,
   },
 });

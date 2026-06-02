@@ -8,6 +8,7 @@ import {
   likeHospital,
   unlikeHospital,
 } from '../../apis/hospitalApi';
+import CustomText from '../../components/common/CustomText';
 
 const FavoriteHospitalsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -88,10 +89,14 @@ const FavoriteHospitalsScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={styles.headerContainer}>
-            <Text style={styles.title}>병원 목록</Text>
+            <CustomText weight="700" style={styles.title}>
+              병원 목록
+            </CustomText>
 
             <View style={styles.searchSection}>
-              <Text style={styles.label}>병원명 검색</Text>
+              <CustomText weight="600" style={styles.label}>
+                병원명 검색
+              </CustomText>
               <TextInput
                 style={styles.searchInput}
                 placeholder="병원명을 입력하세요"
@@ -100,17 +105,19 @@ const FavoriteHospitalsScreen: React.FC = () => {
               />
             </View>
 
-            <Text style={styles.resultCount}>
+            <CustomText style={styles.resultCount}>
               총 {hospitalList.length}개의 병원
-            </Text>
+            </CustomText>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>찜한 병원이 없습니다</Text>
-            <Text style={styles.emptyDescription}>
+            <CustomText weight="700" style={styles.emptyTitle}>
+              찜한 병원이 없습니다
+            </CustomText>
+            <CustomText style={styles.emptyDescription}>
               마음에 드는 병원을 찜해보세요.
-            </Text>
+            </CustomText>
           </View>
         }
       />
@@ -132,7 +139,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 20,
   },
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontWeight: '600',
+    // fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
@@ -156,6 +163,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'SUITE-SemiBold',
     color: '#111827',
   },
   pickerWrapper: {
@@ -176,7 +184,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
   },

@@ -1,11 +1,14 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import TestCard from '../../components/TestCard';
+import CustomText from '../../components/common/CustomText';
 
 function TestScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>마인드 심리테스트</Text>
+        <CustomText weight="700" style={styles.title}>
+          마인드 심리테스트
+        </CustomText>
       </View>
 
       <FlatList
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   listContainer: {
     width: '100%',

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import CustomText from './common/CustomText';
 
 interface TestCardProps {
   link: string;
@@ -16,9 +17,13 @@ function TestCard({ link, title, explanation, color }: TestCardProps) {
 
   return (
     <Pressable style={styles.card} onPress={handlePress}>
-      <Text style={styles.title}>{title}</Text>
+      <CustomText weight="700" style={styles.title}>
+        {title}
+      </CustomText>
       <View style={[styles.explanationContainer, { backgroundColor: color }]}>
-        <Text style={styles.explanation}>{explanation}</Text>
+        <CustomText weight="700" style={styles.explanation}>
+          {explanation}
+        </CustomText>
       </View>
     </Pressable>
   );
@@ -39,13 +44,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginBottom: 8,
   },
   explanation: {
     fontSize: 12,
     color: '#fff',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   explanationContainer: {
     borderRadius: 8,

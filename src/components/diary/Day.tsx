@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import AppColor from '../../utils/AppColor';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CustomText from '../common/CustomText';
 
 interface DayProps {
   date: {
@@ -46,7 +47,9 @@ export default function Day(props: DayProps) {
         },
       ]}
     >
-      <Text style={styles.text}>{extractedDate}</Text>
+      <CustomText weight="700" style={styles.text}>
+        {extractedDate}
+      </CustomText>
     </Pressable>
   );
 }
@@ -63,6 +66,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 });

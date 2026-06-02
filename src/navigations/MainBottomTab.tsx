@@ -14,6 +14,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import NotificationIcon from '../assets/icon/NotificationIcon';
 import { useNavigation } from '@react-navigation/native';
 import { useMatchStore } from '../stores/match';
+import CustomText from '../components/common/CustomText';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -43,6 +44,12 @@ function MainBottomTab() {
       screenOptions={{
         tabBarActiveTintColor: AppColor.main,
         headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'SUITE-Bold',
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'SUITE-SemiBold',
+        },
         headerRight: () => (
           <Pressable
             style={({ pressed }) => [
@@ -54,9 +61,9 @@ function MainBottomTab() {
             <NotificationIcon width={24} height={24} color="black" />
             {matches.length > 0 && (
               <View style={styles.notificationBadge}>
-                <Text style={styles.notificationBadgeText}>
+                <CustomText weight="700" style={styles.notificationBadgeText}>
                   {matches.length}
-                </Text>
+                </CustomText>
               </View>
             )}
           </Pressable>
@@ -122,6 +129,6 @@ const styles = StyleSheet.create({
   notificationBadgeText: {
     color: 'white',
     fontSize: 10,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 });
