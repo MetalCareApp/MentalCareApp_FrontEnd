@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import TestCard from '../../components/TestCard';
 import CustomText from '../../components/common/CustomText';
 
@@ -27,6 +27,27 @@ function TestScreen() {
             title: 'GAD-7 불안 테스트',
             explanation: '불안장애를 진단하기 위한 테스트입니다.',
             color: '#E45757',
+          },
+          {
+            id: 3,
+            link: 'pss_test',
+            title: 'PSS 스트레스 테스트',
+            explanation: '스트레스 수준을 평가하기 위한 테스트입니다.',
+            color: '#F4A261',
+          },
+          {
+            id: 4,
+            link: 'kmdq_test',
+            title: 'K-MDQ 조울증 테스트',
+            explanation: '조울증을 진단하기 위한 테스트입니다.',
+            color: '#0c70b8',
+          },
+          {
+            id: 5,
+            link: 'adhd_test',
+            title: 'ADHD 테스트',
+            explanation: 'ADHD를 진단하기 위한 테스트입니다.',
+            color: '#9B59B6',
           },
         ]}
         keyExtractor={({ id }) => id.toString()}

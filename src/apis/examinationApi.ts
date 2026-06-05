@@ -37,3 +37,35 @@ export const createGAD7Examination = async (scores: number[]): Promise<any> => {
     throw error;
   }
 };
+
+export const createPSSExamination = async (scores: number[]): Promise<any> => {
+  try {
+    const response = await axiosClient.post(`/examinations/stress`, { scores });
+    console.log('createPSSExamination API response:', response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createKMDQExamination = async (scores: number[]): Promise<any> => {
+  try {
+    const response = await axiosClient.post(`/examinations/bipolar`, {
+      scores,
+    });
+    console.log('create K-MDQ Examination API response:', response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createADHDExamination = async (scores: number[]): Promise<any> => {
+  try {
+    const response = await axiosClient.post(`/examinations/adhd`, { scores });
+    console.log('createADHDExamination API response:', response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
