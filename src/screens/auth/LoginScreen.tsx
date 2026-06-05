@@ -5,7 +5,6 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {
@@ -123,21 +122,18 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.container}>
-        <CustomText weight="700" style={styles.title}>
-          시작하기
-        </CustomText>
+      <View />
 
-        <Image
-          style={{
-            width: 120,
-            height: 120,
-            marginBottom: 16,
-            alignSelf: 'center',
-          }}
-          source={require('../../assets/images/remind_logo.png')}
-        />
+      <Image
+        style={{
+          width: '100%',
+          height: 400,
+          alignSelf: 'center',
+        }}
+        source={require('../../assets/images/remind_logo.png')}
+      />
 
+      <View>
         <CustomText
           style={{
             fontSize: 16,
@@ -194,9 +190,11 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#F7F8FA',
-    justifyContent: 'center',
+    // backgroundColor: '#F7F8FA',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
+    paddingVertical: 40,
   },
   container: {
     borderWidth: 1,
