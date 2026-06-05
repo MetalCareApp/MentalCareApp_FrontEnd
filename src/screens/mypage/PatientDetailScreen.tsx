@@ -7,7 +7,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import DateTimePicker, {
@@ -17,6 +16,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { getPatientDetail, PatientDetail, Report } from '../../apis/matchApi';
 import CustomText from '../../components/common/CustomText';
+import { createReport } from '../../apis/reportApi';
 
 type RootStackParamList = {
   patient_detail: { matchId: number };
@@ -126,26 +126,29 @@ const PatientDetailScreen: React.FC = () => {
       return;
     }
 
+    if (!patient?.userId) {
+      Alert.alert('오류', '환자를 찾을 수 없습니다.');
+      return;
+    }
+
     try {
       const payload = {
-        matchId,
+        patientId: patient?.userId,
         startDate: dayjs(startDate).format('YYYY-MM-DD'),
         endDate: dayjs(endDate).format('YYYY-MM-DD'),
       };
 
-      // TODO:
-      // 서버 연결 시 교체
-      // const response = await api.post(`/doctor/patients/${patientId}/reports`, payload);
-      // setReports((prev) => [response.data, ...prev]);
+      const response = await createReport(payload);
+      setReports(prev => [response, ...prev]);
 
       console.log('리포트 생성 요청:', payload);
 
-      const newReport: Report = {
-        id: Date.now(),
-        createdAt: dayjs().format('YYYY-MM-DD'),
-      };
+      // const newReport: Report = {
+      //   id: Date.now(),
+      //   createdAt: dayjs().format('YYYY-MM-DD'),
+      // };
 
-      setReports(prev => [newReport, ...prev]);
+      // setReports(prev => [newReport, ...prev]);
 
       Alert.alert('생성 완료', '리포트 생성 요청이 완료되었습니다.');
       handleCloseModal();
@@ -169,7 +172,7 @@ const PatientDetailScreen: React.FC = () => {
         <View style={styles.reportTopRow}>
           <View style={styles.reportBadge}>
             <CustomText weight="700" style={styles.reportBadgeText}>
-              리포트 {index + 1}
+              리포트 {item.id}
             </CustomText>
           </View>
 
@@ -177,7 +180,7 @@ const PatientDetailScreen: React.FC = () => {
         </View>
 
         <CustomText weight="700" style={styles.reportTitle}>
-          {item.createdAt} 리포트
+          {dayjs(item.createdAt).format('YYYY-MM-DD')} 리포트
         </CustomText>
         <CustomText style={styles.reportDate}>
           생성일 {dayjs(item.createdAt).format('YYYY.MM.DD')}

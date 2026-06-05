@@ -4,13 +4,13 @@ import {
   Dimensions,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import CustomText from '../../components/common/CustomText';
+import { AIReportDetail, getReportDetail } from '../../apis/reportApi';
 
 type RootStackParamList = {
   report_detail: { reportId: number };
@@ -18,86 +18,155 @@ type RootStackParamList = {
 
 type ReportDetailRouteProp = RouteProp<RootStackParamList, 'report_detail'>;
 
-type ReportDetail = {
-  id: number;
-  patientName: string;
-  createdAt: string;
-  sleepData: {
-    date: string;
-    sleepHours: number;
-  }[];
-  medicationData: {
-    date: string;
-    tookMedicine: boolean;
-  }[];
-  emotionData: {
-    date: string;
-    score: number; // 1~5
-  }[];
-  diarySummary: string;
-};
+// type ReportDetail = {
+//   id: number;
+//   patientName: string;
+//   createdAt: string;
+//   sleepData: {
+//     date: string;
+//     sleepHours: number;
+//   }[];
+//   medicationData: {
+//     date: string;
+//     tookMedicine: boolean;
+//   }[];
+//   emotionData: {
+//     date: string;
+//     score: number; // 1~5
+//   }[];
+//   diarySummary: string;
+// };
 
-const DUMMY_REPORT: ReportDetail = {
-  id: 1,
-  patientName: '홍길동',
-  createdAt: '2026-04-28',
-  sleepData: [
-    { date: '2026-04-15', sleepHours: 6.5 },
-    { date: '2026-04-16', sleepHours: 7 },
-    { date: '2026-04-17', sleepHours: 5.5 },
-    { date: '2026-04-18', sleepHours: 8 },
-    { date: '2026-04-19', sleepHours: 6 },
-    { date: '2026-04-20', sleepHours: 7.5 },
-    { date: '2026-04-21', sleepHours: 7 },
-    { date: '2026-04-22', sleepHours: 6 },
-    { date: '2026-04-23', sleepHours: 6.8 },
-    { date: '2026-04-24', sleepHours: 5 },
-    { date: '2026-04-25', sleepHours: 7.2 },
-    { date: '2026-04-26', sleepHours: 8 },
-    { date: '2026-04-27', sleepHours: 6.5 },
-    { date: '2026-04-28', sleepHours: 7 },
-  ],
-  medicationData: [
-    { date: '2026-04-15', tookMedicine: true },
-    { date: '2026-04-16', tookMedicine: true },
-    { date: '2026-04-17', tookMedicine: false },
-    { date: '2026-04-18', tookMedicine: true },
-    { date: '2026-04-19', tookMedicine: true },
-    { date: '2026-04-20', tookMedicine: false },
-    { date: '2026-04-21', tookMedicine: true },
-    { date: '2026-04-22', tookMedicine: true },
-    { date: '2026-04-23', tookMedicine: true },
-    { date: '2026-04-24', tookMedicine: false },
-    { date: '2026-04-25', tookMedicine: true },
-    { date: '2026-04-26', tookMedicine: true },
-    { date: '2026-04-27', tookMedicine: false },
-    { date: '2026-04-28', tookMedicine: true },
-  ],
-  emotionData: [
-    { date: '2026-04-15', score: 3 },
-    { date: '2026-04-16', score: 4 },
-    { date: '2026-04-17', score: 2 },
-    { date: '2026-04-18', score: 3 },
-    { date: '2026-04-19', score: 4 },
-    { date: '2026-04-20', score: 3 },
-    { date: '2026-04-21', score: 5 },
-    { date: '2026-04-22', score: 3 },
-    { date: '2026-04-23', score: 4 },
-    { date: '2026-04-24', score: 2 },
-    { date: '2026-04-25', score: 3 },
-    { date: '2026-04-26', score: 4 },
-    { date: '2026-04-27', score: 3 },
-    { date: '2026-04-28', score: 5 },
-  ],
-  diarySummary: `[주요 증상]
-환자는 진료 사이 기간 동안 지속적인 무기력감과 수면 장애를 호소하였으며, 챗봇 대화 분석 결과 PHQ-9 총점 12점으로 중등도 우울 수준에 해당합니다.
+// const DUMMY_REPORT: AIReportDetail = {
+//   id: 1,
+//   patientName: '홍길동',
+//   createdAt: '2026-06-04T08:17:24.299Z',
+//   // sleepData: [
+//   //   { date: '2026-04-15', sleepHours: 6.5 },
+//   //   { date: '2026-04-16', sleepHours: 7 },
+//   //   { date: '2026-04-17', sleepHours: 5.5 },
+//   //   { date: '2026-04-18', sleepHours: 8 },
+//   //   { date: '2026-04-19', sleepHours: 6 },
+//   //   { date: '2026-04-20', sleepHours: 7.5 },
+//   //   { date: '2026-04-21', sleepHours: 7 },
+//   //   { date: '2026-04-22', sleepHours: 6 },
+//   //   { date: '2026-04-23', sleepHours: 6.8 },
+//   //   { date: '2026-04-24', sleepHours: 5 },
+//   //   { date: '2026-04-25', sleepHours: 7.2 },
+//   //   { date: '2026-04-26', sleepHours: 8 },
+//   //   { date: '2026-04-27', sleepHours: 6.5 },
+//   //   { date: '2026-04-28', sleepHours: 7 },
+//   // ],
+//   // medicationData: [
+//   //   { date: '2026-04-15', tookMedicine: true },
+//   //   { date: '2026-04-16', tookMedicine: true },
+//   //   { date: '2026-04-17', tookMedicine: false },
+//   //   { date: '2026-04-18', tookMedicine: true },
+//   //   { date: '2026-04-19', tookMedicine: true },
+//   //   { date: '2026-04-20', tookMedicine: false },
+//   //   { date: '2026-04-21', tookMedicine: true },
+//   //   { date: '2026-04-22', tookMedicine: true },
+//   //   { date: '2026-04-23', tookMedicine: true },
+//   //   { date: '2026-04-24', tookMedicine: false },
+//   //   { date: '2026-04-25', tookMedicine: true },
+//   //   { date: '2026-04-26', tookMedicine: true },
+//   //   { date: '2026-04-27', tookMedicine: false },
+//   //   { date: '2026-04-28', tookMedicine: true },
+//   // ],
+//   // emotionData: [
+//   //   { date: '2026-04-15', score: 3 },
+//   //   { date: '2026-04-16', score: 4 },
+//   //   { date: '2026-04-17', score: 2 },
+//   //   { date: '2026-04-18', score: 3 },
+//   //   { date: '2026-04-19', score: 4 },
+//   //   { date: '2026-04-20', score: 3 },
+//   //   { date: '2026-04-21', score: 5 },
+//   //   { date: '2026-04-22', score: 3 },
+//   //   { date: '2026-04-23', score: 4 },
+//   //   { date: '2026-04-24', score: 2 },
+//   //   { date: '2026-04-25', score: 3 },
+//   //   { date: '2026-04-26', score: 4 },
+//   //   { date: '2026-04-27', score: 3 },
+//   //   { date: '2026-04-28', score: 5 },
+//   // ],
+//   dailyDetails: [
+//     {
+//       date: '2026-04-15',
+//       emotionScore: 3,
+//       sleepHours: 6.5,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-16',
+//       emotionScore: 4,
+//       sleepHours: 7,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-17',
+//       emotionScore: 2,
+//       sleepHours: 5.5,
+//       medicationTaken: false,
+//     },
+//     {
+//       date: '2026-04-18',
+//       emotionScore: 3,
+//       sleepHours: 8,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-19',
+//       emotionScore: 4,
+//       sleepHours: 6,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-20',
+//       emotionScore: 3,
+//       sleepHours: 7.5,
+//       medicationTaken: false,
+//     },
+//     {
+//       date: '2026-04-21',
+//       emotionScore: 5,
+//       sleepHours: 7,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-22',
+//       emotionScore: 3,
+//       sleepHours: 6,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-23',
+//       emotionScore: 4,
+//       sleepHours: 6.8,
+//       medicationTaken: true,
+//     },
+//     {
+//       date: '2026-04-24',
+//       emotionScore: 2,
+//       sleepHours: 5,
+//       medicationTaken: false,
+//     },
+//     {
+//       date: '2026-04-25',
+//       emotionScore: 3,
+//       sleepHours: 7.2,
+//       medicationTaken: true,
+//     },
+//   ],
+//   content: `[주요 증상]
+// 환자는 진료 사이 기간 동안 지속적인 무기력감과 수면 장애를 호소하였으며, 챗봇 대화 분석 결과 PHQ-9 총점 12점으로 중등도 우울 수준에 해당합니다.
 
-[위험요인]
-PHQ-9 세부 항목 중 흥미 저하(2점), 수면 장애(3점), 집중력 저하(2점)가 확인되었습니다. 자해/자살 사고 관련 발언은 감지되지 않았습니다.
+// [위험요인]
+// PHQ-9 세부 항목 중 흥미 저하(2점), 수면 장애(3점), 집중력 저하(2점)가 확인되었습니다. 자해/자살 사고 관련 발언은 감지되지 않았습니다.
 
-[개선요인]
-복약 순응도 71%로 비교적 규칙적으로 복약 중이며, 복약 후 기분이 개선되는 경향이 관찰되었습니다.`,
-};
+// [개선요인]
+// 복약 순응도 71%로 비교적 규칙적으로 복약 중이며, 복약 후 기분이 개선되는 경향이 관찰되었습니다.`,
+//   treatmentRecommendation: `심리치료: 인지행동치료(CBT) 권장, 주 1회 50분 세션`,
+// };
 
 const screenWidth = Dimensions.get('window').width;
 const cardHorizontalPadding = 32;
@@ -116,7 +185,7 @@ const ReportDetailScreen: React.FC = () => {
   const { reportId } = route.params;
 
   const [loading, setLoading] = useState(true);
-  const [report, setReport] = useState<ReportDetail | null>(null);
+  const [report, setReport] = useState<AIReportDetail | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -125,12 +194,8 @@ const ReportDetailScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get(`/reports/${reportId}`);
-        // setReport(response.data);
-
-        setReport(DUMMY_REPORT);
+        const response = await getReportDetail(reportId);
+        setReport(response);
       } catch (e) {
         setError('리포트를 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -142,13 +207,13 @@ const ReportDetailScreen: React.FC = () => {
   }, [reportId]);
 
   const medicationRate = useMemo(() => {
-    if (!report || report.medicationData.length === 0) return 0;
+    if (!report || report.dailyDetails.length === 0) return 0;
 
-    const successCount = report.medicationData.filter(
-      item => item.tookMedicine,
+    const successCount = report.dailyDetails.filter(
+      item => item.medicationTaken,
     ).length;
 
-    return Math.round((successCount / report.medicationData.length) * 100);
+    return Math.round((successCount / report.dailyDetails.length) * 100);
   }, [report]);
 
   const chartConfig = {
@@ -188,24 +253,24 @@ const ReportDetailScreen: React.FC = () => {
     );
   }
 
+  const labels = report.dailyDetails.map((item, index) =>
+    index % 2 === 0 ? dayjs(item.date).format('MM/DD') : '',
+  );
+
   const sleepChartData = {
-    labels: report.sleepData.map((item, index) =>
-      index % 2 === 0 ? dayjs(item.date).format('MM/DD') : '',
-    ),
+    labels,
     datasets: [
       {
-        data: report.sleepData.map(item => item.sleepHours),
+        data: report.dailyDetails.map(item => item.sleepHours),
       },
     ],
   };
 
   const emotionChartData = {
-    labels: report.emotionData.map((item, index) =>
-      index % 2 === 0 ? dayjs(item.date).format('MM/DD') : '',
-    ),
+    labels,
     datasets: [
       {
-        data: report.emotionData.map(item => item.score),
+        data: report.dailyDetails.map(item => item.emotionScore),
       },
     ],
   };
@@ -239,7 +304,7 @@ const ReportDetailScreen: React.FC = () => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <BarChart
               data={sleepChartData}
-              width={getChartWidth(report.sleepData.length)}
+              width={getChartWidth(report.dailyDetails.length)}
               height={240}
               chartConfig={chartConfig}
               style={styles.chart}
@@ -262,7 +327,7 @@ const ReportDetailScreen: React.FC = () => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <LineChart
               data={emotionChartData}
-              width={getChartWidth(report.emotionData.length)}
+              width={getChartWidth(report.dailyDetails.length)}
               height={220}
               chartConfig={chartConfig}
               bezier
@@ -283,19 +348,21 @@ const ReportDetailScreen: React.FC = () => {
               {medicationRate}%
             </CustomText>
             <CustomText style={styles.medicationDescription}>
-              전체 {report.medicationData.length}일 중{' '}
-              {report.medicationData.filter(item => item.tookMedicine).length}일
-              복약 성공
+              전체 {report.dailyDetails.length}일 중{' '}
+              {report.dailyDetails.filter(item => item.medicationTaken).length}
+              일 복약 성공
             </CustomText>
           </View>
         </View>
 
         <View style={styles.card}>
           <CustomText weight="700" style={styles.sectionTitle}>
-            감정일기 및 챗봇 분석
+            일상기록 기반 AI 임상 요약
           </CustomText>
           <CustomText style={styles.summaryText}>
-            {report.diarySummary}
+            {`${report.content}
+
+치료 권고: ${report.treatmentRecommendation}`}
           </CustomText>
         </View>
       </ScrollView>

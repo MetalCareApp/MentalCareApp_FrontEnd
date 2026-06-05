@@ -4,38 +4,38 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import CustomText from '../../components/common/CustomText';
+import { AIReport, getMyReports } from '../../apis/reportApi';
 
-type Report = {
-  id: number;
-  date: string;
-};
+// type Report = {
+//   id: number;
+//   createdAt: string;
+// };
 
-const DUMMY_REPORTS: Report[] = [
-  {
-    id: 306,
-    date: '2026-04-28',
-  },
-  {
-    id: 203,
-    date: '2026-04-25',
-  },
-  {
-    id: 102,
-    date: '2026-04-20',
-  },
-];
+// const DUMMY_REPORTS: Report[] = [
+//   {
+//     id: 572,
+//     createdAt: '2026-04-28',
+//   },
+//   {
+//     id: 203,
+//     createdAt: '2026-04-25',
+//   },
+//   {
+//     id: 102,
+//     createdAt: '2026-04-20',
+//   },
+// ];
 
 const MyReportListScreen: React.FC = () => {
   const navigation = useNavigation<any>();
 
   const [loading, setLoading] = useState(true);
-  const [reports, setReports] = useState<Report[]>([]);
+  const [reports, setReports] = useState<AIReport[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -44,12 +44,8 @@ const MyReportListScreen: React.FC = () => {
         setLoading(true);
         setError('');
 
-        // TODO:
-        // 서버 연결 시 교체
-        // const response = await api.get("/reports");
-        // setReports(response.data);
-
-        setReports(DUMMY_REPORTS);
+        const response = await getMyReports();
+        setReports(response);
       } catch (e) {
         setError('리포트 목록을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -70,7 +66,7 @@ const MyReportListScreen: React.FC = () => {
     navigation.navigate('report_detail', { reportId });
   };
 
-  const renderItem = ({ item, index }: { item: Report; index: number }) => {
+  const renderItem = ({ item, index }: { item: AIReport; index: number }) => {
     return (
       <Pressable
         style={({ pressed }) => [styles.card, pressed && styles.pressed]}
@@ -87,11 +83,11 @@ const MyReportListScreen: React.FC = () => {
         </View>
 
         <CustomText weight="700" style={styles.reportTitle}>
-          {item.date} 리포트
+          {dayjs(item.createdAt).format('YYYY-MM-DD')} 리포트
         </CustomText>
 
         <CustomText style={styles.reportDate}>
-          생성일 {dayjs(item.date).format('YYYY.MM.DD')}
+          생성일 {dayjs(item.createdAt).format('YYYY.MM.DD')}
         </CustomText>
       </Pressable>
     );
