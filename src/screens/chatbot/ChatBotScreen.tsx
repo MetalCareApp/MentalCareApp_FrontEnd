@@ -6,7 +6,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -16,7 +15,6 @@ import {
   getChatHistory,
   sendMessageToChatbot,
 } from '../../apis/chatbotApi';
-import AppColor from '../../utils/AppColor';
 import CustomText from '../../components/common/CustomText';
 
 type ChatMessage = {
@@ -116,9 +114,7 @@ const ChatbotScreen: React.FC = () => {
           style={[
             styles.messageBubble,
             isUser ? styles.userBubble : styles.assistantBubble,
-            !isUser && item.risk
-              ? { backgroundColor: AppColor.text.error, borderColor: '#000000' }
-              : null,
+            !isUser && item.risk ? { backgroundColor: '#fe6e6e' } : null,
           ]}
         >
           <CustomText
@@ -151,10 +147,10 @@ const ChatbotScreen: React.FC = () => {
     >
       <View style={styles.header}>
         <CustomText weight="700" style={styles.headerTitle}>
-          AI 챗봇
+          심리상담 AI 챗봇
         </CustomText>
         <CustomText style={styles.headerDescription}>
-          궁금한 내용을 입력하면 AI가 답변해드립니다.
+          궁금한 내용을 입력하면 AI가 상담해드립니다.
         </CustomText>
       </View>
 
