@@ -18,143 +18,87 @@ type RootStackParamList = {
 
 type ReportDetailRouteProp = RouteProp<RootStackParamList, 'report_detail'>;
 
-// type ReportDetail = {
-//   id: number;
-//   patientName: string;
-//   createdAt: string;
-//   sleepData: {
-//     date: string;
-//     sleepHours: number;
-//   }[];
-//   medicationData: {
-//     date: string;
-//     tookMedicine: boolean;
-//   }[];
-//   emotionData: {
-//     date: string;
-//     score: number; // 1~5
-//   }[];
-//   diarySummary: string;
-// };
-
 // const DUMMY_REPORT: AIReportDetail = {
 //   id: 1,
 //   patientName: '홍길동',
 //   createdAt: '2026-06-04T08:17:24.299Z',
-//   // sleepData: [
-//   //   { date: '2026-04-15', sleepHours: 6.5 },
-//   //   { date: '2026-04-16', sleepHours: 7 },
-//   //   { date: '2026-04-17', sleepHours: 5.5 },
-//   //   { date: '2026-04-18', sleepHours: 8 },
-//   //   { date: '2026-04-19', sleepHours: 6 },
-//   //   { date: '2026-04-20', sleepHours: 7.5 },
-//   //   { date: '2026-04-21', sleepHours: 7 },
-//   //   { date: '2026-04-22', sleepHours: 6 },
-//   //   { date: '2026-04-23', sleepHours: 6.8 },
-//   //   { date: '2026-04-24', sleepHours: 5 },
-//   //   { date: '2026-04-25', sleepHours: 7.2 },
-//   //   { date: '2026-04-26', sleepHours: 8 },
-//   //   { date: '2026-04-27', sleepHours: 6.5 },
-//   //   { date: '2026-04-28', sleepHours: 7 },
-//   // ],
-//   // medicationData: [
-//   //   { date: '2026-04-15', tookMedicine: true },
-//   //   { date: '2026-04-16', tookMedicine: true },
-//   //   { date: '2026-04-17', tookMedicine: false },
-//   //   { date: '2026-04-18', tookMedicine: true },
-//   //   { date: '2026-04-19', tookMedicine: true },
-//   //   { date: '2026-04-20', tookMedicine: false },
-//   //   { date: '2026-04-21', tookMedicine: true },
-//   //   { date: '2026-04-22', tookMedicine: true },
-//   //   { date: '2026-04-23', tookMedicine: true },
-//   //   { date: '2026-04-24', tookMedicine: false },
-//   //   { date: '2026-04-25', tookMedicine: true },
-//   //   { date: '2026-04-26', tookMedicine: true },
-//   //   { date: '2026-04-27', tookMedicine: false },
-//   //   { date: '2026-04-28', tookMedicine: true },
-//   // ],
-//   // emotionData: [
-//   //   { date: '2026-04-15', score: 3 },
-//   //   { date: '2026-04-16', score: 4 },
-//   //   { date: '2026-04-17', score: 2 },
-//   //   { date: '2026-04-18', score: 3 },
-//   //   { date: '2026-04-19', score: 4 },
-//   //   { date: '2026-04-20', score: 3 },
-//   //   { date: '2026-04-21', score: 5 },
-//   //   { date: '2026-04-22', score: 3 },
-//   //   { date: '2026-04-23', score: 4 },
-//   //   { date: '2026-04-24', score: 2 },
-//   //   { date: '2026-04-25', score: 3 },
-//   //   { date: '2026-04-26', score: 4 },
-//   //   { date: '2026-04-27', score: 3 },
-//   //   { date: '2026-04-28', score: 5 },
-//   // ],
 //   dailyDetails: [
 //     {
 //       date: '2026-04-15',
 //       emotionScore: 3,
 //       sleepHours: 6.5,
 //       medicationTaken: true,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-16',
 //       emotionScore: 4,
 //       sleepHours: 7,
 //       medicationTaken: true,
+//       externalStress: true,
 //     },
 //     {
 //       date: '2026-04-17',
 //       emotionScore: 2,
 //       sleepHours: 5.5,
 //       medicationTaken: false,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-18',
 //       emotionScore: 3,
 //       sleepHours: 8,
 //       medicationTaken: true,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-19',
 //       emotionScore: 4,
 //       sleepHours: 6,
 //       medicationTaken: true,
+//       externalStress: true,
 //     },
 //     {
 //       date: '2026-04-20',
 //       emotionScore: 3,
 //       sleepHours: 7.5,
 //       medicationTaken: false,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-21',
 //       emotionScore: 5,
 //       sleepHours: 7,
 //       medicationTaken: true,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-22',
 //       emotionScore: 3,
 //       sleepHours: 6,
 //       medicationTaken: true,
+//       externalStress: true,
 //     },
 //     {
 //       date: '2026-04-23',
 //       emotionScore: 4,
 //       sleepHours: 6.8,
 //       medicationTaken: true,
+//       externalStress: false,
 //     },
 //     {
 //       date: '2026-04-24',
 //       emotionScore: 2,
 //       sleepHours: 5,
 //       medicationTaken: false,
+//       externalStress: true,
 //     },
 //     {
 //       date: '2026-04-25',
 //       emotionScore: 3,
 //       sleepHours: 7.2,
 //       medicationTaken: true,
+//       externalStress: false,
 //     },
 //   ],
 //   content: `[주요 증상]
@@ -275,6 +219,8 @@ const ReportDetailScreen: React.FC = () => {
     ],
   };
 
+  const stressDays = report.dailyDetails.filter(item => item.externalStress);
+
   return (
     <View style={styles.screen}>
       <ScrollView
@@ -336,6 +282,27 @@ const ReportDetailScreen: React.FC = () => {
               segments={4}
             />
           </ScrollView>
+
+          {stressDays.length > 0 && (
+            <View style={styles.stressBox}>
+              <View style={styles.stressLegendRow}>
+                <View style={styles.stressDot} />
+                <CustomText style={styles.stressLegendText}>
+                  외부 스트레스 발생일
+                </CustomText>
+              </View>
+
+              <View style={styles.stressChipContainer}>
+                {stressDays.map(item => (
+                  <View key={item.date} style={styles.stressChip}>
+                    <CustomText style={styles.stressChipText}>
+                      {dayjs(item.date).format('MM/DD')}
+                    </CustomText>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
 
         <View style={styles.card}>
@@ -454,5 +421,52 @@ const styles = StyleSheet.create({
     // fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
+  },
+  stressBox: {
+    marginTop: 12,
+    backgroundColor: '#FEF2F2',
+    borderWidth: 1,
+    borderColor: '#FECACA',
+    borderRadius: 12,
+    padding: 12,
+  },
+
+  stressLegendRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+
+  stressDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#EF4444',
+    marginRight: 6,
+  },
+
+  stressLegendText: {
+    fontSize: 13,
+    color: '#991B1B',
+  },
+
+  stressChipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+
+  stressChip: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+
+  stressChipText: {
+    fontSize: 12,
+    color: '#DC2626',
   },
 });

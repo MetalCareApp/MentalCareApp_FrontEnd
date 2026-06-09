@@ -32,6 +32,7 @@ export type AIReportDetail = {
     emotionScore: number;
     sleepHours: number;
     medicationTaken: boolean;
+    externalStress: boolean;
   }[];
 };
 
