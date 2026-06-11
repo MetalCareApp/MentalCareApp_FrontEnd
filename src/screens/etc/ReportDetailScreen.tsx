@@ -205,7 +205,9 @@ const ReportDetailScreen: React.FC = () => {
     labels,
     datasets: [
       {
-        data: report.dailyDetails.map(item => item.sleepHours),
+        data: report.dailyDetails.map(item =>
+          Number(item.sleepHours.toFixed(1)),
+        ),
       },
     ],
   };
