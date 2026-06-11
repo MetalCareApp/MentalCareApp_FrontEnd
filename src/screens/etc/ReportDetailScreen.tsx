@@ -331,7 +331,8 @@ const ReportDetailScreen: React.FC = () => {
           <CustomText style={styles.summaryText}>
             {`${report.content}
 
-치료 권고: ${report.treatmentRecommendation}`}
+**치료 권고:**
+${report.treatmentRecommendation}`}
           </CustomText>
         </View>
       </ScrollView>
